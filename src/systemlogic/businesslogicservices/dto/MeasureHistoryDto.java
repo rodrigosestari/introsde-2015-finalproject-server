@@ -9,15 +9,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.localdatabaseservice.entity.Person;
+import systemlogic.businesslogicservices.bean.PersonBean;
 
 @XmlRootElement(name = "measureHistory")
-public class MeasureHistoryBean implements Serializable {
+public class MeasureHistoryDto implements Serializable {
 
 
 	private static final long serialVersionUID = 3521996173451216932L;
 	private List<MeasureDto> measure;
 
-	public MeasureHistoryBean() {
+	public MeasureHistoryDto() {
 	}
 
 	@XmlElement(name = "measure")
@@ -37,7 +38,7 @@ public class MeasureHistoryBean implements Serializable {
 	 * @return object MeasureHistoryBean
 	 * 
 	 */
-	public static MeasureHistoryBean getHistoryBeanFromMeasure(MeasureHistory measure) {
+	public static MeasureHistoryDto getHistoryBeanFromMeasure(MeasureHistory measure) {
 		ArrayList<MeasureHistory> m = new ArrayList<MeasureHistory>();
 		m.add(measure);
 		return getHistoryBeanFromMeasureList(m);
@@ -51,15 +52,15 @@ public class MeasureHistoryBean implements Serializable {
 	 * @return object MeasureHistoryBean
 	 * 
 	 */
-	public static MeasureHistoryBean getHistoryBeanFromMeasureList(List<MeasureHistory> measure) {
-		MeasureHistoryBean hp = null;
+	public static MeasureHistoryDto getHistoryBeanFromMeasureList(List<MeasureHistory> measure) {
+		MeasureHistoryDto hp = null;
 		List<MeasureDto> lmb = new ArrayList<MeasureDto>();
 
 		if ((null != measure) && (measure.size() > 0)) {
-			hp = new MeasureHistoryBean();
+			hp = new MeasureHistoryDto();
 			for (MeasureHistory mh : measure) {
 				MeasureDto mb = new MeasureDto();
-				mb.setCreated(Person.dateToString(mh.getCreated()));
+				mb.setCreated(PersonBean.dateToString(mh.getCreated()));
 				mb.setMid(mh.getIdMeasureHistory());
 				mb.setValue(Double.parseDouble(mh.getValue()));
 				lmb.add(mb);

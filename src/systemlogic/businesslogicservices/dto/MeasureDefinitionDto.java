@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import datasources.localdatabaseservice.entity.MeasureDefinition;
+import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
 
 @XmlRootElement(name = "measureTypes")
 public class MeasureDefinitionDto implements Serializable{
@@ -36,10 +37,10 @@ public class MeasureDefinitionDto implements Serializable{
 	 */
 	public static List<String> getAll() {
 		List<String> mtl = null;
-		List<MeasureDefinition> mdl = MeasureDefinition.getAll();
+		List<MeasureDefinition> mdl = MeasureDefinitionBean.getAll();
 		if ((null != mdl) && (mdl.size() > 0)) {
 			mtl = new ArrayList<String>();
-			for (MeasureDefinition m : MeasureDefinition.getAll()) {
+			for (MeasureDefinition m : MeasureDefinitionBean.getAll()) {
 				mtl.add(m.getMeasureName());
 			}
 		}

@@ -27,7 +27,7 @@ import datasources.localdatabaseservice.entity.MeasureDefinition;
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.localdatabaseservice.entity.Person;
 import systemlogic.businesslogicservices.dto.MeasureDto;
-import systemlogic.businesslogicservices.dto.MeasureHistoryBean;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.dto.PeopleDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 
@@ -148,10 +148,10 @@ public class PersonCollectionResource {
 	@Path("{personId}/{measureType}")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getMeasurement(@PathParam("personId") int id, @PathParam("measureType") String md) {
-		MeasureHistoryBean mhb = null;
+		MeasureHistoryDto mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md);
-			mhb = MeasureHistoryBean.getHistoryBeanFromMeasureList(MeasureHistory.getAllForMeasureType(id, md));
+			mhb = MeasureHistoryDto.getHistoryBeanFromMeasureList(MeasureHistory.getAllForMeasureType(id, md));
 			if (mhb == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -182,13 +182,13 @@ public class PersonCollectionResource {
 	public Response getMeasurementById(@PathParam("personId") int id, @PathParam("measureType") String md,
 			@PathParam("mid") int mid) {
 
-		MeasureHistoryBean mhb = null;
+		MeasureHistoryDto mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md + " id measure:"+mid);
 			MeasureHistory mh = MeasureHistory.getMeasureTypeById(id, md, mid);
 			ArrayList<MeasureHistory> l = new ArrayList<MeasureHistory>();
 			l.add(mh);
-			mhb = MeasureHistoryBean.getHistoryBeanFromMeasureList(l);
+			mhb = MeasureHistoryDto.getHistoryBeanFromMeasureList(l);
 			if (mhb == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -221,7 +221,7 @@ public class PersonCollectionResource {
 	public Response newMeasure(@PathParam("personId") int id, @PathParam("measureType") String md, MeasureDto mb)
 			throws IOException {
 
-		MeasureHistoryBean mhb = null;
+		MeasureHistoryDto mhb = null;
 		try {
 			System.out.println("Creating new measure...");
 
@@ -249,7 +249,7 @@ public class PersonCollectionResource {
 
 			mh = MeasureHistory.insertMeasure(mh);
 			if (mh != null) {
-				mhb = new MeasureHistoryBean();
+				mhb = new MeasureHistoryDto();
 				mhb.setMeasure(MeasureHistory.getBeanAllForMeasureType(id, md));
 			}
 

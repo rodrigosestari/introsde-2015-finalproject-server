@@ -10,82 +10,116 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.dao.LifeCoachDao;
+import datasources.localdatabaseservice.entity.MeasureDefinition;
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.localdatabaseservice.entity.Person;
-import systemlogic.businesslogicservices.dto.MeasureDto;
+import systemlogic.businesslogicservices.dto.HealthProfileDto;
+import systemlogic.businesslogicservices.dto.MeasureTypeDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 
 public class PersonBean {
 	
+
 	/**
-	 * get measure by id
+	 * Get person thorugh id person
 	 * 
-	 * @param id
-	 *            id measure
-	 * @return object MeasureHistory
+	 * @param personId
+	 *            id person
+	 * @return object Person
 	 */
-	public static MeasureHistory getHealthMeasureHistoryById(int id) {
+	public static Person getPersonById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		MeasureHistory p = em.find(MeasureHistory.class, id);
+		Person p = em.find(Person.class, personId);
 		LifeCoachDao.instance.closeConnections(em);
 		return p;
 	}
 
 	/**
-	 * It takes latest measures by type from person
+	 * Get person through id person
 	 * 
-	 * @param idPerson
+	 * @param personId
 	 *            id person
-	 * @return list of measure
+	 * @return object PersonBean
 	 */
-	public static List<MeasureHistory> getHealthMeasureHistoryOldPerson(int idPerson) {
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
+	public static PersonDto getPersonBeanById(int personId) {
+		PersonDto pb = null;
+		try {
+			Person p = getPersonById(personId);
+			if (p != null) {
+				pb = new PersonDto();
+				pb.setBirthdate(dateToString(p.getBirthdate()));
+				pb.setFirstname(p.getName());
+				pb.setLastname(p.getLastname());
+				pb.setHealthprofile(HealthProfileDto
+						.getHealthProfileFromMeasureList(MeasureHistoryBean.getHealthMeasureHistoryOldPerson(personId)));
 
-		List<MeasureHistory> pd = em.createNamedQuery("MeasureHistory.findOldMeasurePerson", MeasureHistory.class)
-				.setParameter("id", idPerson).getResultList();
+				pb.setIdPerson(p.getIdPerson());
+			}
+		} catch (Exception e) {
+			pb = null;
+		}
 
-		LifeCoachDao.instance.closeConnections(em);
-		return pd;
+		return pb;
+
 	}
 
 	/**
-	 * get all MeasureHistory
+	 * get all person
 	 * 
-	 * @return list of MeasureHistory
+	 * @return list of Person
 	 */
-	public static List<MeasureHistory> getAll() {
+	public static List<Person> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		List<MeasureHistory> list = em.createNamedQuery("HealthMeasureHistory.findAll", MeasureHistory.class)
-				.getResultList();
+		List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
 		LifeCoachDao.instance.closeConnections(em);
 		return list;
 	}
 
 	/**
-	 * get all measure from person
+	 * Get all person from DB
 	 * 
-	 * @param idPerson
-	 *            id person
-	 * @return list of MeasureHistory
+	 * @param lastMeasure
+	 *            get only the last measure
+	 * @return list of PersonBean
 	 */
-	public static List<MeasureHistory> getAllbyPerson(int idPerson) {
+	public static List<PersonDto> getAllBean(boolean lastMeasure) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		List<MeasureHistory> list = null;
-		list = em.createNamedQuery("MeasureHistory.findPerson", MeasureHistory.class).setParameter("id", idPerson)
-				.getResultList();
+		List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
+		ArrayList<PersonDto> pbl = null;
+		if ((null != list) && (list.size() > 0)) {
+			pbl = new ArrayList<PersonDto>();
+			for (Person p : list) {
+				try {
+					PersonDto pb = new PersonDto();
+					pb.setBirthdate(dateToString(p.getBirthdate()));
+					pb.setFirstname(p.getName());
+					pb.setLastname(p.getLastname());
+					if (lastMeasure) {
+						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasureList(
+								MeasureHistoryBean.getHealthMeasureHistoryOldPerson(p.getIdPerson())));
+					} else {
+						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasure(
+								MeasureHistoryBean.getHealthMeasureHistoryById(p.getIdPerson())));
+					}
+					pb.setIdPerson(p.getIdPerson());
+					pbl.add(pb);
+				} catch (Exception e) {
+				}
 
+			}
+		}
 		LifeCoachDao.instance.closeConnections(em);
-		return list;
+		return pbl;
 	}
 
 	/**
-	 * insert a new MeasureHistory
+	 * Insert a Person in DB
 	 * 
 	 * @param p
-	 *            object MeasureHistory to insert
-	 * @return object MeasureHistory inserted
+	 *            Object Person to insert
+	 * @return object Person inserted
 	 */
-	public static MeasureHistory insertHealthMeasureHistory(MeasureHistory p) {
+	public static Person insertPerson(Person p) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
@@ -101,133 +135,45 @@ public class PersonBean {
 	}
 
 	/**
-	 * update a measure
+	 * Insert a PersonBean in DB
 	 * 
-	 * @param p
-	 *            object MeasureHistory to update
-	 * @return object MeasureHistory updated
+	 * @param pb
+	 *            Object PersonBean to insert
+	 * @return object PersonBean inserted
 	 */
-	public static MeasureHistory updateHealthMeasureHistory(MeasureHistory p) {
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
+	public static PersonDto insertPersonBean(PersonDto pb) {
+		Person p = new Person();
+
+		p.setBirthdate(stringToDate(pb.getBirthdate()));
+		p.setLastname(pb.getLastname());
+		p.setName(pb.getFirstname());
+		p = insertPerson(p);
+		pb.setIdPerson(p.getIdPerson());
 		try {
-			p = em.merge(p);
-			tx.commit();
+			HealthProfileDto hp = pb.getHealthprofile();
+			if ((null != hp) && (null != hp.getMeasure()) && (hp.getMeasure().size() > 0)) {
+				for (MeasureTypeDto mb : hp.getMeasure()) {
+
+					MeasureHistory m = new MeasureHistory();
+					m.setPerson(p);
+
+					MeasureDefinition md = MeasureDefinitionBean.getMeasureDefinitionByName(mb.getMeasure());
+					if (md == null) {
+						md = new MeasureDefinition();
+						md.setMeasureName(mb.getMeasure());
+						md = MeasureDefinitionBean.insertMeasureDefinition(md);
+					}
+					m.setMeasureDefinition(md);
+
+					m.setCreated(new Date());
+					m.setValue(String.valueOf(mb.getValue()));
+					MeasureHistoryBean.insertHealthMeasureHistory(m);
+				}
+			}
 		} catch (Exception e) {
-			tx.rollback();
+			e.printStackTrace();
 		}
-
-		LifeCoachDao.instance.closeConnections(em);
-		return p;
-	}
-
-	/**
-	 * remove a measure
-	 * 
-	 * @param p
-	 *            object MeasureHistory to remove
-	 */
-	public static void removeHealthMeasureHistory(MeasureHistory p) {
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		try {
-			p = em.merge(p);
-			em.remove(p);
-			tx.commit();
-		} catch (Exception e) {
-			tx.rollback();
-		}
-
-		LifeCoachDao.instance.closeConnections(em);
-	}
-
-	/**
-	 * get all MeasureBean from person and type
-	 * 
-	 * @param id
-	 *            id person
-	 * @param md
-	 *            measure type
-	 * @return list of MeasureBean
-	 */
-	public static List<MeasureHistory> getAllForMeasureType(int id, String md) {
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		List<MeasureHistory> list = em.createNamedQuery("MeasureHistory.findPersonDefinition", MeasureHistory.class)
-				.setParameter("id", id).setParameter("md", md).getResultList();
-		LifeCoachDao.instance.closeConnections(em);
-		return list;
-
-	}
-
-	/**
-	 * get all MeasureBean from person and type
-	 * 
-	 * @param id
-	 *            id person
-	 * @param md
-	 *            measure type
-	 * @return list of MeasureBean
-	 */
-	public static List<MeasureDto> getBeanAllForMeasureType(int id, String md) {
-		List<MeasureHistory> mhl = getAllForMeasureType(id, md);
-		ArrayList<MeasureDto> mbl = new ArrayList<MeasureDto>();
-
-		for (MeasureHistory mh : mhl) {
-			MeasureDto mb = new MeasureDto();
-			mb.setCreated(Person.dateToString(mh.getCreated()));
-			mb.setMid(mh.getIdMeasureHistory());
-			mb.setValue(Double.parseDouble(mh.getValue()));
-			mbl.add(mb);
-		}
-		return mbl;
-
-	}
-
-	/**
-	 * insert a new measure
-	 * 
-	 * @param m
-	 *            object MeasureHistory to insert
-	 * @return object MeasureHistory inserted
-	 */
-	public static MeasureHistory insertMeasure(MeasureHistory m) {
-
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		try {
-			em.persist(m);
-			tx.commit();
-		} catch (Exception e) {
-			tx.rollback();
-		}
-
-		LifeCoachDao.instance.closeConnections(em);
-
-		return m;
-
-	}
-
-	/**
-	 * Get a measure from person, measure type and id measure
-	 * 
-	 * @param id
-	 *            id person
-	 * @param md
-	 *            measure type
-	 * @param idmh
-	 *            id measure history
-	 * @return
-	 */
-	public static MeasureHistory getMeasureTypeById(int id, String md, int idmh) {
-		EntityManager em = LifeCoachDao.instance.createEntityManager();
-
-		MeasureHistory ret = em.createNamedQuery("MeasureHistory.findPersonTypeID", MeasureHistory.class)
-				.setParameter("id", id).setParameter("md", md).setParameter("idhm", idmh).getSingleResult();
-		LifeCoachDao.instance.closeConnections(em);
-		return ret;
+		return pb;
 
 	}
 
@@ -326,6 +272,6 @@ public class PersonBean {
 		}
 		return dataresult;
 	}
-	
+
 }
 
