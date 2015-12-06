@@ -8,7 +8,8 @@ import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureHistory;
-import systemlogic.businesslogicservices.dto.MeasureDto;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
+import systemlogic.businesslogicservices.dto.MeasureListHistoryDto;
 
 public class MeasureHistoryBean {
 
@@ -165,12 +166,12 @@ public class MeasureHistoryBean {
 	 *            measure type
 	 * @return list of MeasureBean
 	 */
-	public static List<MeasureDto> getBeanAllForMeasureType(int id, String md) {
+	public static List<MeasureHistoryDto> getBeanAllForMeasureType(int id, String md) {
 		List<MeasureHistory> mhl = getAllForMeasureType(id, md);
-		ArrayList<MeasureDto> mbl = new ArrayList<MeasureDto>();
+		ArrayList<MeasureHistoryDto> mbl = new ArrayList<MeasureHistoryDto>();
 
 		for (MeasureHistory mh : mhl) {
-			MeasureDto mb = new MeasureDto();
+			MeasureHistoryDto mb = new MeasureHistoryDto();
 			mb.setCreated(PersonBean.dateToString(mh.getCreated()));
 			mb.setMid(mh.getIdMeasureHistory());
 			mb.setValue(Double.parseDouble(mh.getValue()));
@@ -224,6 +225,32 @@ public class MeasureHistoryBean {
 		LifeCoachDao.instance.closeConnections(em);
 		return ret;
 
+	}
+
+	/**
+	 * trasnform a list of MeasureHistory into MeasureHistoryBean
+	 * 
+	 * @param measure
+	 *            list of MeasureHistory
+	 * @return object MeasureHistoryBean
+	 * 
+	 */
+	public static MeasureListHistoryDto getHistoryBeanFromMeasureList(List<MeasureHistory> measure) {
+		MeasureListHistoryDto hp = null;
+		List<MeasureHistoryDto> lmb = new ArrayList<MeasureHistoryDto>();
+
+		if ((null != measure) && (measure.size() > 0)) {
+			hp = new MeasureListHistoryDto();
+			for (MeasureHistory mh : measure) {
+				MeasureHistoryDto mb = new MeasureHistoryDto();
+				mb.setCreated(PersonBean.dateToString(mh.getCreated()));
+				mb.setMid(mh.getIdMeasureHistory());
+				mb.setValue(Double.parseDouble(mh.getValue()));
+				lmb.add(mb);
+			}
+			hp.setMeasure(lmb);
+		}
+		return hp;
 	}
 
 }

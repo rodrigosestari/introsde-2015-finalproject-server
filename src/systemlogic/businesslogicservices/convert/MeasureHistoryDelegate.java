@@ -7,32 +7,32 @@ import java.util.List;
 import org.dozer.DozerBeanMapper;
 
 import datasources.localdatabaseservice.entity.MeasureHistory;
-import systemlogic.businesslogicservices.dto.MeasureDto;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 
-public class MeasureDelegate {
+public class MeasureHistoryDelegate {
 
 	public final static List<String> myMappingFiles = Arrays.asList("dozerMappings.xml");
 
-	public static MeasureHistory MeasureHistory(MeasureDto bean) {
+	public static MeasureHistory MeasureHistory(MeasureHistoryDto bean) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
 		return (MeasureHistory) mapper.map(bean, MeasureHistory.class);
 	}
 
-	public static MeasureDto mapFromMeasure(
+	public static MeasureHistoryDto mapFromMeasure(
 			MeasureHistory measure) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
-		return (MeasureDto) mapper.map(measure,MeasureDto.class);
+		return (MeasureHistoryDto) mapper.map(measure,MeasureHistoryDto.class);
 	}
 
-	public static List<MeasureDto> mapFromMeasureList(
+	public static List<MeasureHistoryDto> mapFromMeasureList(
 			List<MeasureHistory> measurel) {
-		ArrayList<MeasureDto> bl = null;
+		ArrayList<MeasureHistoryDto> bl = null;
 		if ((measurel != null) && (measurel.size() > 0)) {
-			bl = new ArrayList<MeasureDto>();
+			bl = new ArrayList<MeasureHistoryDto>();
 			for (MeasureHistory p : measurel) {
 				bl.add(mapFromMeasure(p));
 			}
