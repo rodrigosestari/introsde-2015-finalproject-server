@@ -13,7 +13,10 @@ import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureDefinition;
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.localdatabaseservice.entity.Person;
+import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
+import systemlogic.businesslogicservices.convert.PersonDelegate;
 import systemlogic.businesslogicservices.dto.HealthProfileDto;
+import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.MeasureTypeDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 
@@ -27,11 +30,12 @@ public class PersonBean {
 	 *            id person
 	 * @return object Person
 	 */
-	public static Person getPersonById(int personId) {
+	public static PersonDto getPersonById(int personId) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		Person p = em.find(Person.class, personId);
 		LifeCoachDao.instance.closeConnections(em);
-		return p;
+		
+		return PersonDelegate.mapFromPerson(p);
 	}
 
 	/**
@@ -44,17 +48,7 @@ public class PersonBean {
 	public static PersonDto getPersonBeanById(int personId) {
 		PersonDto pb = null;
 		try {
-			Person p = getPersonById(personId);
-			if (p != null) {
-				pb = new PersonDto();
-				pb.setBirthdate(dateToString(p.getBirthdate()));
-				pb.setFirstname(p.getName());
-				pb.setLastname(p.getLastname());
-				pb.setHealthprofile(HealthProfileDto
-						.getHealthProfileFromMeasureList(MeasureHistoryBean.getHealthMeasureHistoryOldPerson(personId)));
-
-				pb.setIdPerson(p.getIdPerson());
-			}
+			 pb = getPersonById(personId);			
 		} catch (Exception e) {
 			pb = null;
 		}
@@ -68,11 +62,12 @@ public class PersonBean {
 	 * 
 	 * @return list of Person
 	 */
-	public static List<Person> getAll() {
+	public static List<PersonDto> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
+		List<PersonDto> listDto = PersonDelegate.mapFromPersonList(list);
 		LifeCoachDao.instance.closeConnections(em);
-		return list;
+		return listDto;
 	}
 
 	/**
@@ -95,7 +90,7 @@ public class PersonBean {
 					pb.setFirstname(p.getName());
 					pb.setLastname(p.getLastname());
 					if (lastMeasure) {
-						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasureList(
+						pb.setHealthprofile(MeasureDefinitionDelegate.getHealthProfileFromMeasureList(
 								MeasureHistoryBean.getHealthMeasureHistoryOldPerson(p.getIdPerson())));
 					} else {
 						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasure(
@@ -119,18 +114,20 @@ public class PersonBean {
 	 *            Object Person to insert
 	 * @return object Person inserted
 	 */
-	public static Person insertPerson(Person p) {
+	public static PersonDto insertPerson(PersonDto p) {
+		Person pe = PersonDelegate.mapToPerson(p);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		try {
-			em.persist(p);
+			em.persist(pe);
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 		}
 
 		LifeCoachDao.instance.closeConnections(em);
+		p  = PersonDelegate.mapFromPerson(pe);
 		return p;
 	}
 
@@ -142,12 +139,9 @@ public class PersonBean {
 	 * @return object PersonBean inserted
 	 */
 	public static PersonDto insertPersonBean(PersonDto pb) {
-		Person p = new Person();
-
-		p.setBirthdate(stringToDate(pb.getBirthdate()));
-		p.setLastname(pb.getLastname());
-		p.setName(pb.getFirstname());
-		p = insertPerson(p);
+		PersonDto p = new PersonDto();
+		
+		p = insertPerson(pb);
 		pb.setIdPerson(p.getIdPerson());
 		try {
 			HealthProfileDto hp = pb.getHealthprofile();
@@ -155,11 +149,12 @@ public class PersonBean {
 				for (MeasureTypeDto mb : hp.getMeasure()) {
 
 					MeasureHistory m = new MeasureHistory();
-					m.setPerson(p);
+					Person person = PersonDelegate.mapToPerson(p);
+					m.setPerson(person);
 
-					MeasureDefinition md = MeasureDefinitionBean.getMeasureDefinitionByName(mb.getMeasure());
+					MeasureDefinitionDto md = MeasureDefinitionBean.getMeasureDefinitionByName(mb.getMeasure());
 					if (md == null) {
-						md = new MeasureDefinition();
+						md = new MeasureDefinitionDto();
 						md.setMeasureName(mb.getMeasure());
 						md = MeasureDefinitionBean.insertMeasureDefinition(md);
 					}
@@ -222,13 +217,14 @@ public class PersonBean {
 	 * @param p
 	 *            object Person
 	 */
-	public static void removePerson(Person p) {
+	public static void removePerson(PersonDto p) {
+		Person pe = PersonDelegate.mapToPerson(p);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		try {
-			p = em.merge(p);
-			em.remove(p);
+			pe = em.merge(pe);
+			em.remove(pe);
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();

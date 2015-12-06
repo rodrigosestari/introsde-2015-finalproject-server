@@ -7,6 +7,8 @@ import java.util.List;
 import org.dozer.DozerBeanMapper;
 
 import datasources.localdatabaseservice.entity.Person;
+import systemlogic.businesslogicservices.bean.MeasureHistoryBean;
+import systemlogic.businesslogicservices.dto.HealthProfileDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 
 public class PersonDelegate {
@@ -25,6 +27,9 @@ public class PersonDelegate {
 		mapper.setMappingFiles(myMappingFiles);
 		PersonDto pb =(PersonDto) mapper.map(person,PersonDto.class);
 		//pb.setCurrentHealth(MeasureDelegate.mapFromMeasureList(MeasureBean.getListCurrentMeasureByPerson(pb.getId())));
+//		pb.setHealthprofile(HealthProfileDto
+	//			.getHealthProfileFromMeasureList(MeasureHistoryBean.getHealthMeasureHistoryOldPerson(personId)));
+
 		return pb;
 	}
 

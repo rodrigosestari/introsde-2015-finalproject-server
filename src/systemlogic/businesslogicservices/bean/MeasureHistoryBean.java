@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureHistory;
+import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.dto.MeasureListHistoryDto;
 
@@ -148,12 +149,13 @@ public class MeasureHistoryBean {
 	 *            measure type
 	 * @return list of MeasureBean
 	 */
-	public static List<MeasureHistory> getAllForMeasureType(int id, String md) {
+	public static List<MeasureHistoryDto> getAllForMeasureType(int id, String md) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<MeasureHistory> list = em.createNamedQuery("MeasureHistory.findPersonDefinition", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).getResultList();
 		LifeCoachDao.instance.closeConnections(em);
-		return list;
+		List<MeasureHistoryDto> listDto = MeasureHistoryDelegate.mapFromMeasureList(list);
+		return listDto;
 
 	}
 
@@ -167,17 +169,8 @@ public class MeasureHistoryBean {
 	 * @return list of MeasureBean
 	 */
 	public static List<MeasureHistoryDto> getBeanAllForMeasureType(int id, String md) {
-		List<MeasureHistory> mhl = getAllForMeasureType(id, md);
-		ArrayList<MeasureHistoryDto> mbl = new ArrayList<MeasureHistoryDto>();
-
-		for (MeasureHistory mh : mhl) {
-			MeasureHistoryDto mb = new MeasureHistoryDto();
-			mb.setCreated(PersonBean.dateToString(mh.getCreated()));
-			mb.setMid(mh.getIdMeasureHistory());
-			mb.setValue(Double.parseDouble(mh.getValue()));
-			mbl.add(mb);
-		}
-		return mbl;
+		List<MeasureHistoryDto> mhl = getAllForMeasureType(id, md);
+		return mhl;
 
 	}
 
@@ -217,40 +210,17 @@ public class MeasureHistoryBean {
 	 *            id measure history
 	 * @return
 	 */
-	public static MeasureHistory getMeasureTypeById(int id, String md, int idmh) {
+	public static MeasureHistoryDto getMeasureTypeById(int id, String md, int idmh) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 
 		MeasureHistory ret = em.createNamedQuery("MeasureHistory.findPersonTypeID", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).setParameter("idhm", idmh).getSingleResult();
 		LifeCoachDao.instance.closeConnections(em);
-		return ret;
+		MeasureHistoryDto dto = MeasureHistoryDelegate.mapFromMeasure(ret);
+		return dto;
 
 	}
 
-	/**
-	 * trasnform a list of MeasureHistory into MeasureHistoryBean
-	 * 
-	 * @param measure
-	 *            list of MeasureHistory
-	 * @return object MeasureHistoryBean
-	 * 
-	 */
-	public static MeasureListHistoryDto getHistoryBeanFromMeasureList(List<MeasureHistory> measure) {
-		MeasureListHistoryDto hp = null;
-		List<MeasureHistoryDto> lmb = new ArrayList<MeasureHistoryDto>();
 
-		if ((null != measure) && (measure.size() > 0)) {
-			hp = new MeasureListHistoryDto();
-			for (MeasureHistory mh : measure) {
-				MeasureHistoryDto mb = new MeasureHistoryDto();
-				mb.setCreated(PersonBean.dateToString(mh.getCreated()));
-				mb.setMid(mh.getIdMeasureHistory());
-				mb.setValue(Double.parseDouble(mh.getValue()));
-				lmb.add(mb);
-			}
-			hp.setMeasure(lmb);
-		}
-		return hp;
-	}
 
 }

@@ -51,23 +51,7 @@ public class MeasureHistoryDto implements Serializable {
 		this.created = created;
 	}
 
-	public static HealthProfileDto getHealthProfileFromMeasureList(List<MeasureHistory> measure) {
-		HealthProfileDto hp = null;
-		List<MeasureTypeDto> lmb = new ArrayList<MeasureTypeDto>();
 
-		if ((null != measure) && (measure.size() > 0)) {
-			hp = new HealthProfileDto();
-			for (MeasureHistory mh : measure) {
-				MeasureTypeDto mb = new MeasureTypeDto();
-				mb.setMeasure(mh.getMeasureDefinition().getMeasureName());
-				mb.setValue(Double.parseDouble(mh.getValue()));
-				lmb.add(mb);
-			}
-			hp.setMeasure(lmb);
-		}
-		return hp;
-	}
-	
 	
 	@Override
 	public String toString() {

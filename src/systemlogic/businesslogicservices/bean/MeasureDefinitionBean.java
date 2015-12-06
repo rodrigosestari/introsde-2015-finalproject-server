@@ -7,6 +7,9 @@ import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureDefinition;
+import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
+import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
+import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 
 public class MeasureDefinitionBean {
 	// database operations
@@ -37,18 +40,20 @@ public class MeasureDefinitionBean {
 	 *            MeasureDefinition to insert
 	 * @return MeasureDefinition inserted
 	 */
-	public static MeasureDefinition insertMeasureDefinition(MeasureDefinition p) {
+	public static MeasureDefinitionDto insertMeasureDefinition(MeasureDefinitionDto p) {
+		MeasureDefinition md  = MeasureDefinitionDelegate.mapToMeasure(p);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		try {
-			em.persist(p);
+			em.persist(md);
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 		}
 
 		LifeCoachDao.instance.closeConnections(em);
+		p = MeasureDefinitionDelegate.mapFromMeasure(md);
 		return p;
 	}
 
@@ -103,14 +108,15 @@ public class MeasureDefinitionBean {
 	 *            measure name type
 	 * @return object MeasureDefinition
 	 */
-	static public MeasureDefinition getMeasureDefinitionByName(String name) {
+	static public MeasureDefinitionDto getMeasureDefinitionByName(String name) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 
 		MeasureDefinition me = em.createNamedQuery("MeasureDefinition.findbyName", MeasureDefinition.class)
 				.setParameter("name", name).getSingleResult();
 
 		LifeCoachDao.instance.closeConnections(em);
-		return me;
+		MeasureDefinitionDto dto = MeasureDefinitionDelegate.mapFromMeasure(me);
+		return dto;
 	}
 
 }

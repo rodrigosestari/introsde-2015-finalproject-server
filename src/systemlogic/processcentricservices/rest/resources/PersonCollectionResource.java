@@ -6,11 +6,7 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.PersistenceUnit;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,9 +19,11 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import datasources.localdatabaseservice.entity.MeasureDefinition;
-import datasources.localdatabaseservice.entity.MeasureHistory;
-import datasources.localdatabaseservice.entity.Person;
+import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
+import systemlogic.businesslogicservices.bean.MeasureHistoryBean;
+import systemlogic.businesslogicservices.bean.PersonBean;
+import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
+import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.dto.MeasureListHistoryDto;
 import systemlogic.businesslogicservices.dto.PeopleDto;
@@ -43,13 +41,7 @@ public class PersonCollectionResource {
 	@Context
 	Request request;
 
-	// will work only inside a Java EE application
-	@PersistenceUnit(unitName = "introsde-jpa")
-	EntityManager entityManager;
 
-	// will work only inside a Java EEapplication
-	@PersistenceContext(unitName = "introsde-jpa", type = PersistenceContextType.TRANSACTION)
-	private EntityManagerFactory entityManagerFactory;
 
 	// Return the list of people to the user in the browser
 	/**
@@ -67,7 +59,7 @@ public class PersonCollectionResource {
 		PeopleDto peopleBean = null;		
 		try {
 			System.out.println("Getting list of people...");
-			people = Person.getAllBean(true);			
+			people = PersonBean.getAllBean(true);			
 			if (people == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -88,7 +80,7 @@ public class PersonCollectionResource {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getCount() {
 		System.out.println("Getting count...");
-		List<Person> people = Person.getAll();
+		List<PersonDto> people = PersonBean.getAll();
 		int count = people.size();
 		return String.valueOf(count);
 	}
@@ -111,7 +103,7 @@ public class PersonCollectionResource {
 		PersonDto pb = null;
 		try {
 			System.out.println("Creating new person...");
-			pb = Person.insertPersonBean(person);
+			pb = PersonBean.insertPersonBean(person);
 			if (pb == null) {
 				return Response.noContent().build();
 			} else {
@@ -151,7 +143,7 @@ public class PersonCollectionResource {
 		MeasureListHistoryDto mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md);
-			mhb = MeasureListHistoryDto.getHistoryBeanFromMeasureList(MeasureHistory.getAllForMeasureType(id, md));
+			mhb = MeasureHistoryDelegate.getHistoryBeanFromMeasureList(MeasureHistoryBean.getAllForMeasureType(id, md));
 			if (mhb == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -185,10 +177,10 @@ public class PersonCollectionResource {
 		MeasureListHistoryDto mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md + " id measure:"+mid);
-			MeasureHistory mh = MeasureHistory.getMeasureTypeById(id, md, mid);
-			ArrayList<MeasureHistory> l = new ArrayList<MeasureHistory>();
+			MeasureHistoryDto mh = MeasureHistoryBean.getMeasureTypeById(id, md, mid);
+			ArrayList<MeasureHistoryDto> l = new ArrayList<MeasureHistoryDto>();
 			l.add(mh);
-			mhb = MeasureListHistoryDto.getHistoryBeanFromMeasureList(l);
+			mhb = MeasureHistoryDelegate.getHistoryBeanFromMeasureList(l);
 			if (mhb == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
@@ -225,19 +217,19 @@ public class PersonCollectionResource {
 		try {
 			System.out.println("Creating new measure...");
 
-			Person p = Person.getPersonById(id);
+			PersonDto p = PersonBean.getPersonById(id);
 			if (null == p) {
 				//if person dont found, come created it
-				p = new Person();
+				p = new PersonDto();
 				p.setIdPerson(id);
-				p = Person.insertPerson(p);
+				p = PersonBean.insertPerson(p);
 			}
-			MeasureDefinition m = MeasureDefinition.getMeasureDefinitionByName(md);
+			MeasureDefinitionDto m = MeasureDefinitionBean.getMeasureDefinitionByName(md);
 			if (null == m) {
 				//if measure dont found, come created it
-				m = new MeasureDefinition();
+				m = new MeasureDefinitionDto();
 				m.setMeasureName(md);
-				m = MeasureDefinition.insertMeasureDefinition(m);
+				m = MeasureDefinitionBean.insertMeasureDefinition(m);
 			}
 
 			//create new measure

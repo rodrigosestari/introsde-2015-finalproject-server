@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import datasources.localdatabaseservice.entity.MeasureHistory;
+import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 
 @XmlRootElement
 public class HealthProfileDto implements Serializable {
@@ -40,34 +41,10 @@ public class HealthProfileDto implements Serializable {
 	public static HealthProfileDto getHealthProfileFromMeasure(MeasureHistory measure) {
 		ArrayList<MeasureHistory> m = new ArrayList<MeasureHistory>();
 		m.add(measure);
-		return getHealthProfileFromMeasureList(m);
+		return MeasureHistoryDelegate.getHealthProfileFromMeasureList(m);
 	}
 
-	/**
-	 * get a List of MeasureHistory and put into
-	 * a HealthProfile.
-	 * 
-	 * @param measure
-	 * List of MeasureHistory entity
-	 * @return
-	 *  a HealthProfile structure
-	 */
-	public static HealthProfileDto getHealthProfileFromMeasureList(List<MeasureHistory> measure) {
-		HealthProfileDto hp = null;
-		List<MeasureTypeDto> lmb = new ArrayList<MeasureTypeDto>();
 
-		if ((null != measure) && (measure.size() > 0)) {
-			hp = new HealthProfileDto();
-			for (MeasureHistory mh : measure) {
-				MeasureTypeDto mb = new MeasureTypeDto();
-				mb.setMeasure(mh.getMeasureDefinition().getMeasureName());
-				mb.setValue(Double.parseDouble(mh.getValue()));
-				lmb.add(mb);
-			}
-			hp.setMeasure(lmb);
-		}
-		return hp;
-	}
 
 	@Override
 	public String toString() {

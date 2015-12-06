@@ -14,7 +14,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import datasources.localdatabaseservice.entity.Person;
+import systemlogic.businesslogicservices.bean.PersonBean;
 import systemlogic.businesslogicservices.dto.PersonDto;
 
 @Stateless // only used if the the application is deployed in a Java EE
@@ -86,13 +86,13 @@ public class PersonResource {
 		System.out.println("--> " + person.toString());
 		Response res;
 		try{
-			Person existing = Person.getPersonById(this.id);
+			PersonDto existing = PersonBean.getPersonById(this.id);
 			if (existing == null) {
 				res = Response.noContent().build();
 			} else {
 				//set the new id person
 				person.setIdPerson(existing.getIdPerson());
-				Person.updatePerson(person);
+				PersonBean.updatePerson(person);
 				res = Response.created(uriInfo.getAbsolutePath()).build();
 			}
 		} catch (Exception e) {
@@ -108,11 +108,11 @@ public class PersonResource {
 	@DELETE
 	public Response deletePerson() {
 		try {
-			Person c = Person.getPersonById(id);
+			PersonDto c = PersonBean.getPersonById(id);
 			if (c == null)
 				return Response.noContent().build();
 
-			Person.removePerson(c);
+			PersonBean.removePerson(c);
 		} catch (Exception e) {
 			return Response.serverError().build();
 		}
@@ -123,7 +123,7 @@ public class PersonResource {
 
 	private PersonDto getPersonById(int personId) {
 		System.out.println("Reading person from DB with id: " + personId);
-		PersonDto person = Person.getPersonBeanById(personId);		
+		PersonDto person = PersonBean.getPersonBeanById(personId);		
 		return person;
 	}
 
