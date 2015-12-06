@@ -2,16 +2,10 @@ package datasources.localdatabaseservice.entity;
 
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
@@ -20,11 +14,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import datasources.localdatabaseservice.dao.LifeCoachDao;
-import systemlogic.businesslogicservices.dto.HealthProfileDto;
-import systemlogic.businesslogicservices.dto.MeasureTypeDto;
-import systemlogic.businesslogicservices.dto.PersonDto;
 /**
  * The persistent class for the "Person" database table.
  * 
