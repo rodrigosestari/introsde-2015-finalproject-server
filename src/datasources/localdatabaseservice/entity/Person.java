@@ -21,10 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import introsde.rest.ehealth.bean.HealthProfile;
-import introsde.rest.ehealth.bean.MeasureTypeBean;
-import introsde.rest.ehealth.bean.PersonBean;
-import introsde.rest.ehealth.dao.LifeCoachDao;
+import datasources.localdatabaseservice.dao.LifeCoachDao;
+import systemlogic.businesslogicservices.dto.HealthProfileDto;
+import systemlogic.businesslogicservices.dto.MeasureTypeDto;
+import systemlogic.businesslogicservices.dto.PersonDto;
 /**
  * The persistent class for the "Person" database table.
  * 
@@ -105,16 +105,16 @@ public class Person implements Serializable {
 	 *            id person
 	 * @return object PersonBean
 	 */
-	public static PersonBean getPersonBeanById(int personId) {
-		PersonBean pb = null;
+	public static PersonDto getPersonBeanById(int personId) {
+		PersonDto pb = null;
 		try {
 			Person p = getPersonById(personId);
 			if (p != null) {
-				pb = new PersonBean();
+				pb = new PersonDto();
 				pb.setBirthdate(dateToString(p.getBirthdate()));
 				pb.setFirstname(p.getName());
 				pb.setLastname(p.getLastname());
-				pb.setHealthprofile(HealthProfile
+				pb.setHealthprofile(HealthProfileDto
 						.getHealthProfileFromMeasureList(MeasureHistory.getHealthMeasureHistoryOldPerson(personId)));
 
 				pb.setIdPerson(p.getIdPerson());
@@ -146,23 +146,23 @@ public class Person implements Serializable {
 	 *            get only the last measure
 	 * @return list of PersonBean
 	 */
-	public static List<PersonBean> getAllBean(boolean lastMeasure) {
+	public static List<PersonDto> getAllBean(boolean lastMeasure) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<Person> list = em.createNamedQuery("Person.findAll", Person.class).getResultList();
-		ArrayList<PersonBean> pbl = null;
+		ArrayList<PersonDto> pbl = null;
 		if ((null != list) && (list.size() > 0)) {
-			pbl = new ArrayList<PersonBean>();
+			pbl = new ArrayList<PersonDto>();
 			for (Person p : list) {
 				try {
-					PersonBean pb = new PersonBean();
+					PersonDto pb = new PersonDto();
 					pb.setBirthdate(dateToString(p.getBirthdate()));
 					pb.setFirstname(p.getName());
 					pb.setLastname(p.getLastname());
 					if (lastMeasure) {
-						pb.setHealthprofile(HealthProfile.getHealthProfileFromMeasureList(
+						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasureList(
 								MeasureHistory.getHealthMeasureHistoryOldPerson(p.getIdPerson())));
 					} else {
-						pb.setHealthprofile(HealthProfile.getHealthProfileFromMeasure(
+						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasure(
 								MeasureHistory.getHealthMeasureHistoryById(p.getIdPerson())));
 					}
 					pb.setIdPerson(p.getIdPerson());
@@ -205,7 +205,7 @@ public class Person implements Serializable {
 	 *            Object PersonBean to insert
 	 * @return object PersonBean inserted
 	 */
-	public static PersonBean insertPersonBean(PersonBean pb) {
+	public static PersonDto insertPersonBean(PersonDto pb) {
 		Person p = new Person();
 
 		p.setBirthdate(stringToDate(pb.getBirthdate()));
@@ -214,9 +214,9 @@ public class Person implements Serializable {
 		p = insertPerson(p);
 		pb.setIdPerson(p.getIdPerson());
 		try {
-			HealthProfile hp = pb.getHealthprofile();
+			HealthProfileDto hp = pb.getHealthprofile();
 			if ((null != hp) && (null != hp.getMeasure()) && (hp.getMeasure().size() > 0)) {
-				for (MeasureTypeBean mb : hp.getMeasure()) {
+				for (MeasureTypeDto mb : hp.getMeasure()) {
 
 					MeasureHistory m = new MeasureHistory();
 					m.setPerson(p);
@@ -269,7 +269,7 @@ public class Person implements Serializable {
 	 *            object PersonBean
 	 * @return object PersonBean updated
 	 */
-	public static Person updatePerson(PersonBean pb) {
+	public static Person updatePerson(PersonDto pb) {
 
 		Person p = new Person();
 

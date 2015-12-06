@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import introsde.rest.ehealth.dao.LifeCoachDao;
+import datasources.localdatabaseservice.dao.LifeCoachDao;
 
 /**
  * The persistent class for the "MeasureDefinition" database table.

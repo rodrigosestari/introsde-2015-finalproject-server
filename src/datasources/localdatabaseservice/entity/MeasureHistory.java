@@ -21,8 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import introsde.rest.ehealth.bean.MeasureBean;
-import introsde.rest.ehealth.dao.LifeCoachDao;
+import datasources.localdatabaseservice.dao.LifeCoachDao;
+import systemlogic.businesslogicservices.dto.MeasureDto;
 
 /**
  * The persistent class for the "HealthMeasureHistory" database table.
@@ -260,12 +260,12 @@ public class MeasureHistory implements Serializable {
 	 *            measure type
 	 * @return list of MeasureBean
 	 */
-	public static List<MeasureBean> getBeanAllForMeasureType(int id, String md) {
+	public static List<MeasureDto> getBeanAllForMeasureType(int id, String md) {
 		List<MeasureHistory> mhl = getAllForMeasureType(id, md);
-		ArrayList<MeasureBean> mbl = new ArrayList<MeasureBean>();
+		ArrayList<MeasureDto> mbl = new ArrayList<MeasureDto>();
 
 		for (MeasureHistory mh : mhl) {
-			MeasureBean mb = new MeasureBean();
+			MeasureDto mb = new MeasureDto();
 			mb.setCreated(Person.dateToString(mh.getCreated()));
 			mb.setMid(mh.getIdMeasureHistory());
 			mb.setValue(Double.parseDouble(mh.getValue()));
