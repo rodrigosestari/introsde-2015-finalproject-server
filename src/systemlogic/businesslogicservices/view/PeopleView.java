@@ -1,4 +1,4 @@
-package systemlogic.businesslogicservices.dto;
+package systemlogic.businesslogicservices.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,8 +7,10 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import systemlogic.businesslogicservices.dto.PersonDto;
+
 @XmlRootElement(name = "people")
-public class PeopleDto implements Serializable {
+public class PeopleView implements Serializable {
 
 	private static final long serialVersionUID = -6571361062455280397L;
 	
@@ -23,7 +25,7 @@ public class PeopleDto implements Serializable {
 		this.person = person;
 	}
 
-	public PeopleDto() {
+	public PeopleView() {
 
 	}
 

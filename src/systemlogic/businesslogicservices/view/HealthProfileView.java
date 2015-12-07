@@ -1,4 +1,4 @@
-package systemlogic.businesslogicservices.dto;
+package systemlogic.businesslogicservices.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,21 +11,21 @@ import datasources.localdatabaseservice.entity.MeasureHistory;
 import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 
 @XmlRootElement
-public class HealthProfileDto implements Serializable {
+public class HealthProfileView implements Serializable {
 
 
 	private static final long serialVersionUID = -7294911323864810080L;
-	private List<MeasureTypeDto> measure;
+	private List<MeasureTypeView> measure;
 
-	public HealthProfileDto() {
+	public HealthProfileView() {
 	}
 
 	@XmlElement(name = "measureType")
-	public List<MeasureTypeDto> getMeasure() {
+	public List<MeasureTypeView> getMeasure() {
 		return measure;
 	}
 
-	public void setMeasure(List<MeasureTypeDto> measure) {
+	public void setMeasure(List<MeasureTypeView> measure) {
 		this.measure = measure;
 	}
 
@@ -38,7 +38,7 @@ public class HealthProfileDto implements Serializable {
 	 * a HealthProfile structure
 	 * 
 	 */
-	public static HealthProfileDto getHealthProfileFromMeasure(MeasureHistory measure) {
+	public static HealthProfileView getHealthProfileFromMeasure(MeasureHistory measure) {
 		ArrayList<MeasureHistory> m = new ArrayList<MeasureHistory>();
 		m.add(measure);
 		return MeasureHistoryDelegate.getHealthProfileFromMeasureList(m);

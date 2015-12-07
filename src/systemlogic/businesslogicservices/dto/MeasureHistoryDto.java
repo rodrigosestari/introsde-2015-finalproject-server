@@ -1,61 +1,63 @@
 package systemlogic.businesslogicservices.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import datasources.localdatabaseservice.entity.MeasureHistory;
-
-import javax.xml.bind.annotation.XmlAccessType;
-
-@XmlRootElement(name = "measure")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "mid", "value", "created" })
 public class MeasureHistoryDto implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9163938455236472286L;
+	private static final long serialVersionUID = 6050748928415880448L;
+	
+	private int idMeasureHistory;
 
-	private Integer mid;
+	private Date created;
 
-	private double value;
+	private String value;
 
-	private String created;
+	private MeasureDefinitionDto measureDefinition;
 
-	public Integer getMid() {
-		return mid;
+	private PersonDto person;
+
+	public int getIdMeasureHistory() {
+		return idMeasureHistory;
 	}
 
-	public void setMid(Integer mid) {
-		this.mid = mid;
+	public void setIdMeasureHistory(int idMeasureHistory) {
+		this.idMeasureHistory = idMeasureHistory;
 	}
 
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	public String getCreated() {
+	public Date getCreated() {
 		return created;
 	}
 
-	public void setCreated(String created) {
+	public void setCreated(Date created) {
 		this.created = created;
 	}
 
+	public String getValue() {
+		return value;
+	}
 
-	
-	@Override
-	public String toString() {
-		return "MeasureHistoryBean [mid=" + mid + ", value=" + value + ", created=" + created + "]";
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public MeasureDefinitionDto getMeasureDefinition() {
+		return measureDefinition;
+	}
+
+	public void setMeasureDefinition(MeasureDefinitionDto measureDefinition) {
+		this.measureDefinition = measureDefinition;
+	}
+
+	public PersonDto getPerson() {
+		return person;
+	}
+
+	public void setPerson(PersonDto person) {
+		this.person = person;
 	}
 
 }

@@ -1,55 +1,56 @@
 package systemlogic.businesslogicservices.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import datasources.localdatabaseservice.entity.MeasureDefinition;
-import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
-
-@XmlRootElement(name = "measureTypes")
-public class MeasureDefinitionDto implements Serializable{
-
-
-	private static final long serialVersionUID = -6959456534581259572L;
-	private List<String> measureType = new ArrayList<String>();
-
-	@XmlElement(name = "measureType")
-	public List<String> getMeasureType() {
-		return measureType;
-	}
-
-	public void setMeasureType(List<String> measureType) {
-		this.measureType = measureType;
-	}
-
-	public MeasureDefinitionDto() {
-
-	}
-
+public class MeasureDefinitionDto  implements Serializable{
 	/**
-	 * get all measure names
-	 * @return
-	 * list  of String 
+	 * 
 	 */
-	public static List<String> getAll() {
-		List<String> mtl = null;
-		List<MeasureDefinition> mdl = MeasureDefinitionBean.getAll();
-		if ((null != mdl) && (mdl.size() > 0)) {
-			mtl = new ArrayList<String>();
-			for (MeasureDefinition m : MeasureDefinitionBean.getAll()) {
-				mtl.add(m.getMeasureName());
-			}
-		}
-		return mtl;
+	private static final long serialVersionUID = 4919220552369615873L;
+	private int idMeasureDef;
+	private String measureName;
+	public int getIdMeasureDef() {
+		return idMeasureDef;
 	}
-
+	public void setIdMeasureDef(int idMeasureDef) {
+		this.idMeasureDef = idMeasureDef;
+	}
+	public String getMeasureName() {
+		return measureName;
+	}
+	public void setMeasureName(String measureName) {
+		this.measureName = measureName;
+	}
 	@Override
 	public String toString() {
-		return "MeasureDefinitionBean [measureType=" + measureType + "]";
+		return "MeasureDefinitionDto [idMeasureDef=" + idMeasureDef + ", measureName=" + measureName + "]";
 	}
-
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idMeasureDef;
+		result = prime * result + ((measureName == null) ? 0 : measureName.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MeasureDefinitionDto other = (MeasureDefinitionDto) obj;
+		if (idMeasureDef != other.idMeasureDef)
+			return false;
+		if (measureName == null) {
+			if (other.measureName != null)
+				return false;
+		} else if (!measureName.equals(other.measureName))
+			return false;
+		return true;
+	}
+	
+	
 }

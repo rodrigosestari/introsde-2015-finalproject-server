@@ -1,16 +1,14 @@
 package systemlogic.businesslogicservices.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureHistory;
+import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
-import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
-import systemlogic.businesslogicservices.dto.MeasureListHistoryDto;
+import systemlogic.businesslogicservices.view.MeasureHistoryView;
 
 public class MeasureHistoryBean {
 
@@ -149,12 +147,12 @@ public class MeasureHistoryBean {
 	 *            measure type
 	 * @return list of MeasureBean
 	 */
-	public static List<MeasureHistoryDto> getAllForMeasureType(int id, String md) {
+	public static List<MeasureHistoryView> getAllForMeasureType(int id, String md) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<MeasureHistory> list = em.createNamedQuery("MeasureHistory.findPersonDefinition", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).getResultList();
 		LifeCoachDao.instance.closeConnections(em);
-		List<MeasureHistoryDto> listDto = MeasureHistoryDelegate.mapFromMeasureList(list);
+		List<MeasureHistoryView> listDto = MeasureHistoryDelegate.mapFromMeasureList(list);
 		return listDto;
 
 	}
@@ -168,8 +166,8 @@ public class MeasureHistoryBean {
 	 *            measure type
 	 * @return list of MeasureBean
 	 */
-	public static List<MeasureHistoryDto> getBeanAllForMeasureType(int id, String md) {
-		List<MeasureHistoryDto> mhl = getAllForMeasureType(id, md);
+	public static List<MeasureHistoryView> getBeanAllForMeasureType(int id, String md) {
+		List<MeasureHistoryView> mhl = getAllForMeasureType(id, md);
 		return mhl;
 
 	}
@@ -210,13 +208,13 @@ public class MeasureHistoryBean {
 	 *            id measure history
 	 * @return
 	 */
-	public static MeasureHistoryDto getMeasureTypeById(int id, String md, int idmh) {
+	public static MeasureHistoryView getMeasureTypeById(int id, String md, int idmh) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 
 		MeasureHistory ret = em.createNamedQuery("MeasureHistory.findPersonTypeID", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).setParameter("idhm", idmh).getSingleResult();
 		LifeCoachDao.instance.closeConnections(em);
-		MeasureHistoryDto dto = MeasureHistoryDelegate.mapFromMeasure(ret);
+		MeasureHistoryView dto = MeasureHistoryDelegate.mapFromMeasure(ret);
 		return dto;
 
 	}

@@ -1,4 +1,4 @@
-package systemlogic.businesslogicservices.dto;
+package systemlogic.businesslogicservices.view;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "measureType")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "measure", "value" })
-public class MeasureTypeDto implements Serializable {
+public class MeasureTypeView implements Serializable {
 
 	private static final long serialVersionUID = -5954240662398049240L;
 

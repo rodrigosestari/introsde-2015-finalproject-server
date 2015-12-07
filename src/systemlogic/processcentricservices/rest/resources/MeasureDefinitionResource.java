@@ -11,7 +11,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
+import systemlogic.businesslogicservices.view.MeasureListDefinitionView;
 
 @Stateless
 @LocalBean
@@ -36,12 +36,12 @@ public class MeasureDefinitionResource {
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getMeasureTypesXml() {
 
-		MeasureDefinitionDto mdb = null;
+		MeasureListDefinitionView mdb = null;
 		try {
 			System.out.println("Getting list of measures type...");
 			
-			mdb = new MeasureDefinitionDto();			
-			mdb.setMeasureType(MeasureDefinitionDto.getAll());
+			mdb = new MeasureListDefinitionView();			
+			mdb.setMeasureType(MeasureListDefinitionView.getAll());
 			
 			if (null == mdb.getMeasureType() ) {
 				return Response.status(Response.Status.NOT_FOUND).build();

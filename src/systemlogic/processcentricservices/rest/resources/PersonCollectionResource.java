@@ -25,9 +25,11 @@ import systemlogic.businesslogicservices.bean.PersonBean;
 import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
-import systemlogic.businesslogicservices.dto.MeasureListHistoryDto;
-import systemlogic.businesslogicservices.dto.PeopleDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
+import systemlogic.businesslogicservices.view.MeasureHistoryView;
+import systemlogic.businesslogicservices.view.MeasureListDefinitionView;
+import systemlogic.businesslogicservices.view.MeasureListHistoryView;
+import systemlogic.businesslogicservices.view.PeopleView;
 
 @Stateless // will work only inside a Java EE application
 @LocalBean // will work only inside a Java EE application
@@ -56,14 +58,14 @@ public class PersonCollectionResource {
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response  getPersonsBrowser() {
 		List<PersonDto> people = null;
-		PeopleDto peopleBean = null;		
+		PeopleView peopleBean = null;		
 		try {
 			System.out.println("Getting list of people...");
 			people = PersonBean.getAllBean(true);			
 			if (people == null) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
-				peopleBean =  new PeopleDto();
+				peopleBean =  new PeopleView();
 				peopleBean.setPerson(people);
 				return Response.ok().entity(peopleBean).build();
 			}
@@ -140,7 +142,7 @@ public class PersonCollectionResource {
 	@Path("{personId}/{measureType}")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getMeasurement(@PathParam("personId") int id, @PathParam("measureType") String md) {
-		MeasureListHistoryDto mhb = null;
+		MeasureListHistoryView mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md);
 			mhb = MeasureHistoryDelegate.getHistoryBeanFromMeasureList(MeasureHistoryBean.getAllForMeasureType(id, md));
@@ -174,11 +176,11 @@ public class PersonCollectionResource {
 	public Response getMeasurementById(@PathParam("personId") int id, @PathParam("measureType") String md,
 			@PathParam("mid") int mid) {
 
-		MeasureListHistoryDto mhb = null;
+		MeasureListHistoryView mhb = null;
 		try {
 			System.out.println("Getting measurement from DB with Person: " + id + " measure: " + md + " id measure:"+mid);
-			MeasureHistoryDto mh = MeasureHistoryBean.getMeasureTypeById(id, md, mid);
-			ArrayList<MeasureHistoryDto> l = new ArrayList<MeasureHistoryDto>();
+			MeasureHistoryView mh = MeasureHistoryBean.getMeasureTypeById(id, md, mid);
+			ArrayList<MeasureHistoryView> l = new ArrayList<MeasureHistoryView>();
 			l.add(mh);
 			mhb = MeasureHistoryDelegate.getHistoryBeanFromMeasureList(l);
 			if (mhb == null) {
@@ -210,10 +212,10 @@ public class PersonCollectionResource {
 	@Path("{personId}/{measureType}")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response newMeasure(@PathParam("personId") int id, @PathParam("measureType") String md, MeasureHistoryDto mb)
+	public Response newMeasure(@PathParam("personId") int id, @PathParam("measureType") String md, MeasureHistoryView mb)
 			throws IOException {
 
-		MeasureListHistoryDto mhb = null;
+		MeasureListHistoryView mhb = null;
 		try {
 			System.out.println("Creating new measure...");
 
@@ -233,16 +235,17 @@ public class PersonCollectionResource {
 			}
 
 			//create new measure
-			MeasureHistory mh = new MeasureHistory();
-			mh.setCreated(Person.stringToDate(mb.getCreated()));
-			mh.setMeasureDefinition(m);
+			MeasureHistoryDto mh = new MeasureHistoryDto();	
+			mh.setCreated(PersonBean.stringToDate(mb.getCreated()));
+			mh.setMid(mid);
+			setMeasureDefinition(m);
 			mh.setPerson(p);
 			mh.setValue(String.valueOf(mb.getValue()));
 
-			mh = MeasureHistory.insertMeasure(mh);
+			mh = MeasureHistoryDto.insertMeasure(mh);
 			if (mh != null) {
-				mhb = new MeasureListHistoryDto();
-				mhb.setMeasure(MeasureHistory.getBeanAllForMeasureType(id, md));
+				mhb = new MeasureListHistoryView();
+				mhb.setMeasure(MeasureHistoryDto.getBeanAllForMeasureType(id, md));
 			}
 
 			if (mhb == null) {

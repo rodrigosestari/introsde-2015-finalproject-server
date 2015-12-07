@@ -5,10 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureDefinition;
+import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
-import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 
 public class MeasureDefinitionBean {
@@ -25,12 +24,13 @@ public class MeasureDefinitionBean {
 	 * 
 	 * @return list of MeasureDefinition
 	 */
-	public static List<MeasureDefinition> getAll() {
+	public static List<MeasureDefinitionDto> getAll() {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<MeasureDefinition> list = em.createNamedQuery("MeasureDefinition.findAll", MeasureDefinition.class)
 				.getResultList();
 		LifeCoachDao.instance.closeConnections(em);
-		return list;
+		List<MeasureDefinitionDto>  md = MeasureDefinitionDelegate.mapFromMeasureList(list);
+		return md;
 	}
 
 	/**
@@ -64,12 +64,13 @@ public class MeasureDefinitionBean {
 	 *            object MeasureDefinition to update
 	 * @return object MeasureDefinition updated
 	 */
-	public static MeasureDefinition updateMeasureDefinition(MeasureDefinition p) {
+	public static MeasureDefinitionDto updateMeasureDefinition(MeasureDefinitionDto p) {
+		MeasureDefinition entity  = MeasureDefinitionDelegate.mapToMeasure(p);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		try {
-			p = em.merge(p);
+			entity = em.merge(entity);
 			tx.commit();
 
 		} catch (Exception e) {
@@ -77,6 +78,7 @@ public class MeasureDefinitionBean {
 		}
 
 		LifeCoachDao.instance.closeConnections(em);
+		p = MeasureDefinitionDelegate.mapFromMeasure(entity);
 		return p;
 	}
 

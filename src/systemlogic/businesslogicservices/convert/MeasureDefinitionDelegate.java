@@ -8,11 +8,9 @@ import org.dozer.DozerBeanMapper;
 
 import datasources.localdatabaseservice.entity.MeasureDefinition;
 import datasources.localdatabaseservice.entity.MeasureHistory;
-import datasources.localdatabaseservice.entity.Person;
-import systemlogic.businesslogicservices.dto.HealthProfileDto;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
-import systemlogic.businesslogicservices.dto.MeasureTypeDto;
-import systemlogic.businesslogicservices.dto.PersonDto;
+import systemlogic.businesslogicservices.view.HealthProfileView;
+import systemlogic.businesslogicservices.view.MeasureTypeView;
 
 public class MeasureDefinitionDelegate {
 
@@ -53,14 +51,14 @@ public class MeasureDefinitionDelegate {
 		return bl;
 	}
 	
-	public static HealthProfileDto getHealthProfileFromMeasureList(List<MeasureHistory> measure) {
-		HealthProfileDto hp = null;
-		List<MeasureTypeDto> lmb = new ArrayList<MeasureTypeDto>();
+	public static HealthProfileView getHealthProfileFromMeasureList(List<MeasureHistory> measure) {
+		HealthProfileView hp = null;
+		List<MeasureTypeView> lmb = new ArrayList<MeasureTypeView>();
 
 		if ((null != measure) && (measure.size() > 0)) {
-			hp = new HealthProfileDto();
+			hp = new HealthProfileView();
 			for (MeasureHistory mh : measure) {
-				MeasureTypeDto mb = new MeasureTypeDto();
+				MeasureTypeView mb = new MeasureTypeView();
 				mb.setMeasure(mh.getMeasureDefinition().getMeasureName());
 				mb.setValue(Double.parseDouble(mh.getValue()));
 				lmb.add(mb);

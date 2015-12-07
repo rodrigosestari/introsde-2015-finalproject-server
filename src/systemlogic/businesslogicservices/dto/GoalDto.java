@@ -7,9 +7,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import datasources.localdatabaseservice.entity.MeasureDefinition;
-import datasources.localdatabaseservice.entity.Person;
-
 @XmlRootElement(name = "goal")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GoalDto implements  Serializable {
@@ -28,9 +25,9 @@ public class GoalDto implements  Serializable {
 
 	private String value;
 
-	private MeasureDefinition measureDefinition;
+	private MeasureDefinitionDto measureDefinition;
 
-	private Person person;
+	private PersonDto person;
 
 	public int getIdMeasureHistory() {
 		return idMeasureHistory;
@@ -72,19 +69,19 @@ public class GoalDto implements  Serializable {
 		this.value = value;
 	}
 
-	public MeasureDefinition getMeasureDefinition() {
+	public MeasureDefinitionDto getMeasureDefinition() {
 		return measureDefinition;
 	}
 
-	public void setMeasureDefinition(MeasureDefinition measureDefinition) {
+	public void setMeasureDefinition(MeasureDefinitionDto measureDefinition) {
 		this.measureDefinition = measureDefinition;
 	}
 
-	public Person getPerson() {
+	public PersonDto getPerson() {
 		return person;
 	}
 
-	public void setPerson(Person person) {
+	public void setPerson(PersonDto person) {
 		this.person = person;
 	}
 

@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import systemlogic.businesslogicservices.view.HealthProfileView;
+
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "idPerson", "firstname", "lastname", "birthdate", "healthprofile" })
@@ -21,7 +23,7 @@ public class PersonDto implements Serializable {
 	private String birthdate;
 
 	@XmlElement(name = "healthProfile")
-	private HealthProfileDto healthprofile;
+	private HealthProfileView healthprofile;
 
 	public Integer getIdPerson() {
 		return idPerson;
@@ -55,11 +57,11 @@ public class PersonDto implements Serializable {
 		this.birthdate = birthdate;
 	}
 
-	public HealthProfileDto getHealthprofile() {
+	public HealthProfileView getHealthprofile() {
 		return healthprofile;
 	}
 
-	public void setHealthprofile(HealthProfileDto healthprofile) {
+	public void setHealthprofile(HealthProfileView healthprofile) {
 		this.healthprofile = healthprofile;
 	}
 

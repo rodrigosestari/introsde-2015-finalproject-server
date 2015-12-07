@@ -9,16 +9,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import datasources.localdatabaseservice.dao.LifeCoachDao;
 import datasources.localdatabaseservice.entity.MeasureDefinition;
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.localdatabaseservice.entity.Person;
+import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
 import systemlogic.businesslogicservices.convert.PersonDelegate;
-import systemlogic.businesslogicservices.dto.HealthProfileDto;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
-import systemlogic.businesslogicservices.dto.MeasureTypeDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
+import systemlogic.businesslogicservices.view.HealthProfileView;
+import systemlogic.businesslogicservices.view.MeasureTypeView;
 
 public class PersonBean {
 	
@@ -93,7 +93,7 @@ public class PersonBean {
 						pb.setHealthprofile(MeasureDefinitionDelegate.getHealthProfileFromMeasureList(
 								MeasureHistoryBean.getHealthMeasureHistoryOldPerson(p.getIdPerson())));
 					} else {
-						pb.setHealthprofile(HealthProfileDto.getHealthProfileFromMeasure(
+						pb.setHealthprofile(HealthProfileView.getHealthProfileFromMeasure(
 								MeasureHistoryBean.getHealthMeasureHistoryById(p.getIdPerson())));
 					}
 					pb.setIdPerson(p.getIdPerson());
@@ -139,26 +139,29 @@ public class PersonBean {
 	 * @return object PersonBean inserted
 	 */
 	public static PersonDto insertPersonBean(PersonDto pb) {
-		PersonDto p = new PersonDto();
 		
-		p = insertPerson(pb);
-		pb.setIdPerson(p.getIdPerson());
+				
+		pb = insertPerson(pb);
+		pb.setIdPerson(pb.getIdPerson());
 		try {
-			HealthProfileDto hp = pb.getHealthprofile();
+			HealthProfileView hp = pb.getHealthprofile();
 			if ((null != hp) && (null != hp.getMeasure()) && (hp.getMeasure().size() > 0)) {
-				for (MeasureTypeDto mb : hp.getMeasure()) {
+				Person person = PersonDelegate.mapToPerson(pb);
+				for (MeasureTypeView mb : hp.getMeasure()) {
 
 					MeasureHistory m = new MeasureHistory();
-					Person person = PersonDelegate.mapToPerson(p);
+
 					m.setPerson(person);
 
 					MeasureDefinitionDto md = MeasureDefinitionBean.getMeasureDefinitionByName(mb.getMeasure());
 					if (md == null) {
 						md = new MeasureDefinitionDto();
-						md.setMeasureName(mb.getMeasure());
+						md.setMeasureName(mb.getMeasure()); 
+						
 						md = MeasureDefinitionBean.insertMeasureDefinition(md);
 					}
-					m.setMeasureDefinition(md);
+					MeasureDefinition mdEntity = MeasureDefinitionDelegate.mapToMeasure(md);
+					m.setMeasureDefinition(mdEntity);
 
 					m.setCreated(new Date());
 					m.setValue(String.valueOf(mb.getValue()));
