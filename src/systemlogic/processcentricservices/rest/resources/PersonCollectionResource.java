@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,7 +26,6 @@ import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 import systemlogic.businesslogicservices.view.MeasureHistoryView;
-import systemlogic.businesslogicservices.view.MeasureListDefinitionView;
 import systemlogic.businesslogicservices.view.MeasureListHistoryView;
 import systemlogic.businesslogicservices.view.PeopleView;
 
@@ -234,18 +232,17 @@ public class PersonCollectionResource {
 				m = MeasureDefinitionBean.insertMeasureDefinition(m);
 			}
 
-			//create new measure
+			//create new measure		
 			MeasureHistoryDto mh = new MeasureHistoryDto();	
 			mh.setCreated(PersonBean.stringToDate(mb.getCreated()));
-			mh.setMid(mid);
-			setMeasureDefinition(m);
+			mh.setMeasureDefinition(m);						
 			mh.setPerson(p);
 			mh.setValue(String.valueOf(mb.getValue()));
 
-			mh = MeasureHistoryDto.insertMeasure(mh);
+			mh = MeasureHistoryBean.insertMeasure(mh);
 			if (mh != null) {
 				mhb = new MeasureListHistoryView();
-				mhb.setMeasure(MeasureHistoryDto.getBeanAllForMeasureType(id, md));
+				mhb.setMeasure(MeasureHistoryBean.getBeanAllForMeasureType(id, md));
 			}
 
 			if (mhb == null) {

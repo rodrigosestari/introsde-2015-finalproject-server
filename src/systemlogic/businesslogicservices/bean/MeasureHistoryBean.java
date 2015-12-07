@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.view.MeasureHistoryView;
 
 public class MeasureHistoryBean {
@@ -152,7 +153,7 @@ public class MeasureHistoryBean {
 		List<MeasureHistory> list = em.createNamedQuery("MeasureHistory.findPersonDefinition", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).getResultList();
 		LifeCoachDao.instance.closeConnections(em);
-		List<MeasureHistoryView> listDto = MeasureHistoryDelegate.mapFromMeasureList(list);
+		List<MeasureHistoryView> listDto = MeasureHistoryDelegate.mapViewFromMeasureList(list);
 		return listDto;
 
 	}
@@ -179,20 +180,20 @@ public class MeasureHistoryBean {
 	 *            object MeasureHistory to insert
 	 * @return object MeasureHistory inserted
 	 */
-	public static MeasureHistory insertMeasure(MeasureHistory m) {
-
+	public static MeasureHistoryDto insertMeasure(MeasureHistoryDto m) {
+		MeasureHistory entity =  MeasureHistoryDelegate.mapToMeasure(m);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		try {
-			em.persist(m);
+			em.persist(entity);
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 		}
 
 		LifeCoachDao.instance.closeConnections(em);
-
+        m = MeasureHistoryDelegate.mapFromMeasure(entity);
 		return m;
 
 	}
@@ -214,7 +215,7 @@ public class MeasureHistoryBean {
 		MeasureHistory ret = em.createNamedQuery("MeasureHistory.findPersonTypeID", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).setParameter("idhm", idmh).getSingleResult();
 		LifeCoachDao.instance.closeConnections(em);
-		MeasureHistoryView dto = MeasureHistoryDelegate.mapFromMeasure(ret);
+		MeasureHistoryView dto =MeasureHistoryDelegate.dtoToView(MeasureHistoryDelegate.mapFromMeasure(ret));
 		return dto;
 
 	}

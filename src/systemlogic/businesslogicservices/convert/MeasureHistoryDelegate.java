@@ -7,6 +7,8 @@ import java.util.List;
 import org.dozer.DozerBeanMapper;
 
 import datasources.localdatabaseservice.entity.MeasureHistory;
+import systemlogic.businesslogicservices.bean.PersonBean;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.view.HealthProfileView;
 import systemlogic.businesslogicservices.view.MeasureHistoryView;
 import systemlogic.businesslogicservices.view.MeasureListHistoryView;
@@ -16,26 +18,46 @@ public class MeasureHistoryDelegate {
 
 	public final static List<String> myMappingFiles = Arrays.asList("dozerMappings.xml");
 
-	public static MeasureHistory MeasureHistory(MeasureHistoryView bean) {
+	public static MeasureHistory MeasureHistory(MeasureHistoryDto bean) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
 		return (MeasureHistory) mapper.map(bean, MeasureHistory.class);
 	}
 
-	public static MeasureHistoryView mapFromMeasure(
+	public static MeasureHistoryDto mapFromMeasure(
 			MeasureHistory measure) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
-		return (MeasureHistoryView) mapper.map(measure,MeasureHistoryView.class);
+		return (MeasureHistoryDto) mapper.map(measure,MeasureHistoryDto.class);
 	}
 
-	public static List<MeasureHistoryView> mapFromMeasureList(
+	public static MeasureHistory mapToMeasure(
+			MeasureHistoryDto measure) {
+
+		DozerBeanMapper mapper = new DozerBeanMapper();
+		mapper.setMappingFiles(myMappingFiles);
+		return (MeasureHistory) mapper.map(measure,MeasureHistory.class);
+	}
+	
+	
+	
+	public static List<MeasureHistoryView> mapViewFromMeasureList(
 			List<MeasureHistory> measurel) {
-		ArrayList<MeasureHistoryView> bl = null;
+		List<MeasureHistoryView> viewList = new ArrayList<MeasureHistoryView>();
+		List<MeasureHistoryDto>  dtoList = mapFromMeasureList(measurel);
+		for (MeasureHistoryDto dto : dtoList){
+			viewList.add(dtoToView(dto));
+		}
+		return viewList;
+	}
+	
+	public static List<MeasureHistoryDto> mapFromMeasureList(
+			List<MeasureHistory> measurel) {
+		ArrayList<MeasureHistoryDto> bl = null;
 		if ((measurel != null) && (measurel.size() > 0)) {
-			bl = new ArrayList<MeasureHistoryView>();
+			bl = new ArrayList<MeasureHistoryDto>();
 			for (MeasureHistory p : measurel) {
 				bl.add(mapFromMeasure(p));
 			}
@@ -96,12 +118,26 @@ public class MeasureHistoryDelegate {
 	 * @return object MeasureHistoryBean
 	 * 
 	 */
-	public static MeasureListHistoryView getHistoryBeanFromMeasure(MeasureHistory measure) {
+	public static MeasureListHistoryView getHistoryBeanFromMeasure(MeasureHistoryDto measure) {		
 		ArrayList<MeasureHistoryView> m = new ArrayList<MeasureHistoryView>();
-		MeasureHistoryView dto = mapFromMeasure(measure);
+		MeasureHistoryView dto = dtoToView(measure);
 		m.add(dto);
 		return getHistoryBeanFromMeasureList(m);
 	}
-
+	public static MeasureHistoryDto viewToDto(MeasureHistoryView view){
+		MeasureHistoryDto dto = new MeasureHistoryDto();
+		dto.setCreated(PersonBean.stringToDate(view.getCreated()));
+		dto.setIdMeasureHistory(view.getMid());
+		dto.setValue(String.valueOf(view.getValue()));
+		return dto;
+	}
+	
+	public static MeasureHistoryView dtoToView (MeasureHistoryDto dto){
+		MeasureHistoryView view = new MeasureHistoryView();
+		view.setCreated(PersonBean.dateToString(dto.getCreated()));	
+		view.setMid(dto.getIdMeasureHistory());
+		view.setValue(Double.valueOf(dto.getValue()));
+		return view;
+	}
 
 }
