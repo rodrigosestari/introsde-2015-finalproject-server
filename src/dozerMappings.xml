@@ -6,13 +6,50 @@
 
 
 	<mapping>
+		<class-a>systemlogic.businesslogicservices.dto.MeasureDefinitionDto
+		</class-a>
+		<class-b>datasources.localdatabaseservice.entity.MeasureDefinition
+		</class-b>
+		<field>
+			<a>measureName</a>
+			<b>measureName</b>
+		</field>
+		<field>
+			<a>idMeasureDef</a>
+			<b>idMeasureDef</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>systemlogic.businesslogicservices.dto.MeasureHistoryDto
+		</class-a>
+		<class-b>datasources.localdatabaseservice.entity.MeasureHistory
+		</class-b>
+		<field>
+			<a>person</a>
+			<b>person</b>
+		</field>
+		<field>
+			<a>measureDefinition</a>
+			<b>measureDefinition</b>
+		</field>
+		<field>
+			<a>value</a>
+			<b>value</b>
+		</field>
+		<field>
+			<a>created</a>
+			<b>created</b>
+		</field>
+		<field>
+			<a>idMeasureHistory</a>
+			<b>idMeasureHistory</b>
+		</field>
+	</mapping>
+	<mapping>
 		<class-a>systemlogic.businesslogicservices.dto.PersonDto</class-a>
 		<class-b>datasources.localdatabaseservice.entity.Person</class-b>
 
-		<field>
-			<a>birthdate</a>
-			<b>birthdate</b>
-		</field>
+
 		<field>
 			<a>lastname</a>
 			<b>lastname</b>
@@ -21,25 +58,12 @@
 			<a>firstname</a>
 			<b>name</b>
 		</field>
+
 		<field>
 			<a>idPerson</a>
 			<b>idPerson</b>
 		</field>
 	</mapping>
-	<mapping>
-		<class-a>systemlogic.businesslogicservices.dto.MeasureHistoryDto
-		</class-a>
-		<class-b>datasources.localdatabaseservice.entity.MeasureHistory
-		</class-b>
-		
-		
-		
-	<field><a>person</a><b>person</b></field><field><a>measureDefinition</a><b>measureDefinition</b></field><field><a>value</a><b>value</b></field><field><a>created</a><b>created</b></field><field><a>idMeasureHistory</a><b>idMeasureHistory</b></field></mapping>
-	<mapping>
-		<class-a>systemlogic.businesslogicservices.dto.MeasureDefinitionDto</class-a>
-		<class-b>datasources.localdatabaseservice.entity.MeasureDefinition</class-b>
-		
-	<field><a>measureName</a><b>measureName</b></field><field><a>idMeasureDef</a><b>idMeasureDef</b></field></mapping>
 
 	<mapping>
 		<class-a>systemlogic.businesslogicservices.dto.GoalDto</class-a>

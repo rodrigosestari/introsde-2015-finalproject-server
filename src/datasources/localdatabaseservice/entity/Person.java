@@ -35,9 +35,6 @@ public class Person implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	@Temporal(TemporalType.DATE) // defines the precision of the date attribute
-	@Column(name = "birthdate")
-	private Date birthdate;
 
 	public int getIdPerson() {
 		return idPerson;
@@ -63,15 +60,7 @@ public class Person implements Serializable {
 		this.name = name;
 	}
 
-	public Date getBirthdate() {
 
-		return birthdate;
-	}
-
-	public void setBirthdate(Date birthdate) {
-
-		this.birthdate = birthdate;
-	}
 
 	@Override
 	public int hashCode() {

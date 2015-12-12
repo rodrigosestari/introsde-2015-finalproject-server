@@ -38,7 +38,7 @@ public class ClientXml {
 	private static FileWriter writer = null;
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("https://rodrigo-sestari.herokuapp.com/assignment2").build();
+		return UriBuilder.fromUri("http://10.218.221.138:5700/finalprojectrest/").build();
 	}
 
 	public static NodeList getNodes(String source, String query) throws Exception {
@@ -240,7 +240,7 @@ public class ClientXml {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String newname = dateFormat.format(new Date());
-		String newPerson ="<person><firstname>newPersonXML at "+newname+"</firstname><lastname>XML</lastname><birthdate>2000-03-22</birthdate><healthProfile><measureType><measure>heigth</measure><value>58.1</value></measureType><measureType><measure>weigth</measure><value>34.2</value></measureType></healthProfile></person>";
+		String newPerson ="<person><firstname>newPersonXML at "+newname+"</firstname><lastname>XML</lastname><healthProfile><measureType><measure>heigth</measure><value>58.1</value></measureType><measureType><measure>weigth</measure><value>34.2</value></measureType></healthProfile></person>";
 		write(newPerson);
 		Response response = service.request(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML).post(Entity.xml(newPerson));
 		int httpStatus =response.getStatus();     		

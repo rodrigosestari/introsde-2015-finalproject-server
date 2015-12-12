@@ -86,7 +86,7 @@ public class PersonBean {
 			for (Person p : list) {
 				try {
 					PersonDto pb = new PersonDto();
-					pb.setBirthdate(dateToString(p.getBirthdate()));
+					
 					pb.setFirstname(p.getName());
 					pb.setLastname(p.getLastname());
 					if (lastMeasure) {
@@ -206,8 +206,7 @@ public class PersonBean {
 	public static Person updatePerson(PersonDto pb) {
 
 		Person p = new Person();
-
-		p.setBirthdate(stringToDate(pb.getBirthdate()));
+		
 		p.setIdPerson(pb.getIdPerson());
 		p.setLastname(pb.getLastname());
 		p.setName(pb.getFirstname());
@@ -247,8 +246,9 @@ public class PersonBean {
 		Date dataresult = new Date();
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			//SimpleDateFormat sdf =  new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 			dataresult = sdf.parse(data);
-		} catch (ParseException e) {
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		return dataresult;

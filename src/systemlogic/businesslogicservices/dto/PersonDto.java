@@ -12,7 +12,7 @@ import systemlogic.businesslogicservices.view.HealthProfileView;
 
 @XmlRootElement(name = "person")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "idPerson", "firstname", "lastname", "birthdate", "healthprofile" })
+@XmlType(propOrder = { "idPerson", "firstname", "lastname",  "healthprofile" })
 public class PersonDto implements Serializable {
 
 
@@ -20,7 +20,7 @@ public class PersonDto implements Serializable {
 	private Integer idPerson;
 	private String firstname;
 	private String lastname;
-	private String birthdate;
+	
 
 	@XmlElement(name = "healthProfile")
 	private HealthProfileView healthprofile;
@@ -49,13 +49,7 @@ public class PersonDto implements Serializable {
 		this.lastname = lastname;
 	}
 
-	public String getBirthdate() {
-		return birthdate;
-	}
 
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
-	}
 
 	public HealthProfileView getHealthprofile() {
 		return healthprofile;
@@ -67,7 +61,7 @@ public class PersonDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PersonBean [lastname=" + lastname + ", firstname=" + firstname + ", birthdate=" + birthdate
+		return "PersonBean [lastname=" + lastname + ", firstname=" + firstname 
 				+ ", healthprofile=" + healthprofile + "]";
 	}
 

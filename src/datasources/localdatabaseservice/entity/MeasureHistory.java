@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 		@NamedQuery(name = "MeasureHistory.findPerson", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id "),
 		@NamedQuery(name = "MeasureHistory.findOldMeasurePerson", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id GROUP BY h.measureDefinition, h.person ORDER BY h.idMeasureHistory DESC"),
 		@NamedQuery(name = "MeasureHistory.findPersonTypeID", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id and h.measureDefinition.measureName = :md and h.idMeasureHistory = :idhm"),
-		@NamedQuery(name = "MeasureHistory.findPersonDefinition", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id and h.measureDefinition.measureName = :md") })
+		@NamedQuery(name = "MeasureHistory.findPersonDefinition", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id and h.measureDefinition.measureName = :md") ,
+		})
 @XmlRootElement
 public class MeasureHistory implements Serializable {
 	
