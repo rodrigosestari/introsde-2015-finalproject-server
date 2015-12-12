@@ -4,9 +4,9 @@ import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
-@ApplicationPath("assignment2")
+@ApplicationPath("finalprojectrest")
 public class MyApplicationConfig extends ResourceConfig {
     public MyApplicationConfig() {
-        packages("introsde.rest.ehealth");
+        packages("systemlogic.processcentricservices.rest.resources");
     }
 }
