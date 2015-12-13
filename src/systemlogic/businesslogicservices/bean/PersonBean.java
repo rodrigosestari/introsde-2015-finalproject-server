@@ -93,7 +93,7 @@ public class PersonBean {
 						pb.setHealthprofile(MeasureDefinitionDelegate.getHealthProfileFromMeasureList(
 								MeasureHistoryBean.getHealthMeasureHistoryOldPerson(p.getIdPerson())));
 					} else {
-						pb.setHealthprofile(HealthProfileView.getHealthProfileFromMeasure(
+						pb.setHealthprofile(MeasureHistoryBean.getHealthProfileFromMeasure(
 								MeasureHistoryBean.getHealthMeasureHistoryById(p.getIdPerson())));
 					}
 					pb.setIdPerson(p.getIdPerson());

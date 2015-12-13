@@ -1,5 +1,6 @@
 package systemlogic.businesslogicservices.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -120,5 +121,24 @@ public class MeasureDefinitionBean {
 		MeasureDefinitionDto dto = MeasureDefinitionDelegate.mapFromMeasure(me);
 		return dto;
 	}
+
+	/**
+	 * get all measure names
+	 * @return
+	 * list  of String 
+	 */
+	public static List<String> getAllDefinition() {
+		List<String> mtl = null;
+		List<MeasureDefinitionDto> mdl = getAll();
+		if ((null != mdl) && (mdl.size() > 0)) {
+			mtl = new ArrayList<String>();
+			for (MeasureDefinitionDto m : getAll()) {
+				mtl.add(m.getMeasureName());
+			}
+		}
+		return mtl;
+	}
+	
+
 
 }

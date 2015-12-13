@@ -11,6 +11,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
 import systemlogic.businesslogicservices.view.MeasureListDefinitionView;
 
 @Stateless
@@ -41,7 +42,7 @@ public class MeasureDefinitionResource {
 			System.out.println("Getting list of measures type...");
 			
 			mdb = new MeasureListDefinitionView();			
-			mdb.setMeasureType(MeasureListDefinitionView.getAll());
+			mdb.setMeasureType(MeasureDefinitionBean.getAllDefinition());
 			
 			if (null == mdb.getMeasureType() ) {
 				return Response.status(Response.Status.NOT_FOUND).build();

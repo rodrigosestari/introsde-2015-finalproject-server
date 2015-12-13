@@ -1,5 +1,6 @@
 package systemlogic.businesslogicservices.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
+import systemlogic.businesslogicservices.view.HealthProfileView;
 import systemlogic.businesslogicservices.view.MeasureHistoryView;
 
 public class MeasureHistoryBean {
@@ -219,6 +221,22 @@ public class MeasureHistoryBean {
 		return dto;
 
 	}
+	
+	/**
+	 * get a MeasureHistory and put into
+	 * a HealthProfile.
+	 * @param measure
+	 * List of MeasureHistory entity
+	 * @return
+	 * a HealthProfile structure
+	 * 
+	 */
+	public static HealthProfileView getHealthProfileFromMeasure(MeasureHistory measure) {
+		ArrayList<MeasureHistory> m = new ArrayList<MeasureHistory>();
+		m.add(measure);
+		return MeasureHistoryDelegate.getHealthProfileFromMeasureList(m);
+	}
+
 	
 
 
