@@ -9,12 +9,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Goal.findbyPerson", query = "SELECT h FROM Goal h WHERE h.person.idPerson = :person"),
+	@NamedQuery(name = "Goal.findbyPersonType", query = "SELECT h FROM Goal h WHERE h.person.idPerson = :person and h.type= :type") })
 @Table(name = "Goal")
 public class Goal  implements Serializable{
 
@@ -27,7 +32,7 @@ public class Goal  implements Serializable{
 	@GeneratedValue(generator = "sqlite_goal")
 	@TableGenerator(name = "sqlite_goal", table = "sqlite_sequence", pkColumnName = "name", valueColumnName = "seq", pkColumnValue = "Goal")
 	@Column(name = "id_goal")
-	private int idMeasureHistory;
+	private int idGoal;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dateStart")
@@ -54,12 +59,12 @@ public class Goal  implements Serializable{
 	@JoinColumn(name = "idPerson", referencedColumnName = "idPerson")
 	private Person person;
 
-	public int getIdMeasureHistory() {
-		return idMeasureHistory;
+	public int getIdGoal() {
+		return idGoal;
 	}
 
-	public void setIdMeasureHistory(int idMeasureHistory) {
-		this.idMeasureHistory = idMeasureHistory;
+	public void setIdGoal(int idGoal) {
+		this.idGoal = idGoal;
 	}
 
 	public Date getStart() {
@@ -112,7 +117,7 @@ public class Goal  implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Goal [idMeasureHistory=" + idMeasureHistory + ", start=" + start + ", end=" + end + ", type=" + type
+		return "Goal [idMeasureHistory=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type
 				+ ", value=" + value + ", measureDefinition=" + measureDefinition + ", person=" + person + "]";
 	}
 
@@ -120,7 +125,7 @@ public class Goal  implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idMeasureHistory;
+		result = prime * result + idGoal;
 		result = prime * result + ((person == null) ? 0 : person.hashCode());
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
@@ -135,7 +140,7 @@ public class Goal  implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Goal other = (Goal) obj;
-		if (idMeasureHistory != other.idMeasureHistory)
+		if (idGoal != other.idGoal)
 			return false;
 		if (person == null) {
 			if (other.person != null)

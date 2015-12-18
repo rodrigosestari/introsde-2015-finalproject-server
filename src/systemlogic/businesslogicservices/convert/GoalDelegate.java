@@ -13,14 +13,14 @@ public class GoalDelegate {
 
 	public final static List<String> myMappingFiles = Arrays.asList("dozerMappings.xml");
 
-	public static Goal MeasureHistory(GoalDto bean) {
+	public static Goal mapToGoal(GoalDto bean) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
 		return (Goal) mapper.map(bean, Goal.class);
 	}
 
-	public static GoalDto mapFromMeasure(
+	public static GoalDto mapFromGoal(
 			Goal measure) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
@@ -28,13 +28,13 @@ public class GoalDelegate {
 		return (GoalDto) mapper.map(measure,GoalDto.class);
 	}
 
-	public static List<GoalDto> mapFromMeasureList(
-			List<Goal> measurel) {
+	public static List<GoalDto> mapFromGoalList(
+			List<Goal> mm) {
 		ArrayList<GoalDto> bl = null;
-		if ((measurel != null) && (measurel.size() > 0)) {
+		if ((mm != null) && (mm.size() > 0)) {
 			bl = new ArrayList<GoalDto>();
-			for (Goal p : measurel) {
-				bl.add(mapFromMeasure(p));
+			for (Goal p : mm) {
+				bl.add(mapFromGoal(p));
 			}
 		}
 		return bl;

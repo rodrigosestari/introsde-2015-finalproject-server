@@ -15,7 +15,7 @@ public class GoalDto implements  Serializable {
 	 */
 	private static final long serialVersionUID = 6546071085851753736L;
 
-	private int idMeasureHistory;
+	private int idGoal;
 
 	private Date start;
 
@@ -29,12 +29,12 @@ public class GoalDto implements  Serializable {
 
 	private PersonDto person;
 
-	public int getIdMeasureHistory() {
-		return idMeasureHistory;
+	public int getIdGoal() {
+		return idGoal;
 	}
 
-	public void setIdMeasureHistory(int idMeasureHistory) {
-		this.idMeasureHistory = idMeasureHistory;
+	public void setIdGoal(int idGoal) {
+		this.idGoal = idGoal;
 	}
 
 	public Date getStart() {
@@ -87,7 +87,7 @@ public class GoalDto implements  Serializable {
 
 	@Override
 	public String toString() {
-		return "GoalDto [idMeasureHistory=" + idMeasureHistory + ", start=" + start + ", end=" + end + ", type=" + type
+		return "GoalDto [idMeasureHistory=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type
 				+ ", value=" + value + ", measureDefinition=" + measureDefinition + ", person=" + person + "]";
 	}
 
