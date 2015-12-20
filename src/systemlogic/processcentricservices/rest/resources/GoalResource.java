@@ -24,6 +24,7 @@ import systemlogic.businesslogicservices.bean.PersonBean;
 import systemlogic.businesslogicservices.dto.GoalDto;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
+import systemlogic.businesslogicservices.view.GoalList;
 
 @Stateless
 @LocalBean
@@ -39,16 +40,20 @@ public class GoalResource {
 	@GET
 	@Path("{personId}")
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response getGoalPerson(@PathParam("personId") int idperson) {
-		PersonDto person = PersonBean.getPersonById(idperson);
-		List<GoalDto> result = GoalBean.personGoals(person);
+	public Response getGoalPerson(@PathParam("personId") int idperson) {		
+		List<GoalDto> result =  GoalBean.personGoals(idperson);
+		
 
 		try {
+			
 
 			if (null == result) {
+				
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
-				return Response.ok().entity(result).build();
+				GoalList gl  = new GoalList();
+				gl.setGoals(result);
+				return Response.ok().entity(gl).build();
 			}
 		} catch (Exception e) {
 			return Response.serverError().build();

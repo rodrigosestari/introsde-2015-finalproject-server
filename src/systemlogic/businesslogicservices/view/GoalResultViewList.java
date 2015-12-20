@@ -1,5 +1,6 @@
 package systemlogic.businesslogicservices.view;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -8,8 +9,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import systemlogic.businesslogicservices.dto.GoalDto;
 
 @XmlRootElement(name = "goalview")
-public class GoalResultViewList {
+public class GoalResultViewList implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5624284379740765759L;
+
 	private List<GoalResultView> goals;
 
 	private GoalDto goaltype;

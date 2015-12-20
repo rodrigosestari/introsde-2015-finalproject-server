@@ -21,11 +21,11 @@ public class GoalDelegate {
 	}
 
 	public static GoalDto mapFromGoal(
-			Goal measure) {
+			Goal goal) {
 
 		DozerBeanMapper mapper = new DozerBeanMapper();
 		mapper.setMappingFiles(myMappingFiles);
-		return (GoalDto) mapper.map(measure,GoalDto.class);
+		return (GoalDto) mapper.map(goal,GoalDto.class);
 	}
 
 	public static List<GoalDto> mapFromGoalList(

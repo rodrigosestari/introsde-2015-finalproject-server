@@ -59,9 +59,10 @@ public class GoalBean {
 
 	public static GoalDto getGoal(int id) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		GoalDto p = em.find(GoalDto.class, id);
+		Goal p = em.find(Goal.class, id);
 		LifeCoachDao.instance.closeConnections(em);
-		return p;
+		GoalDto dto = GoalDelegate.mapFromGoal(p);
+		return  dto;
 	}
 
 	public boolean createGoal(PersonDto person, MeasureDefinitionDto measure, TypeGoal type, Float value,
@@ -80,10 +81,10 @@ public class GoalBean {
 
 	}
 
-	public static List<GoalDto> personGoals(PersonDto person) {
+	public static List<GoalDto> personGoals(int idperson) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		List<Goal> list = em.createNamedQuery("Goal.findbyPerson", Goal.class)
-				.setParameter("person", person.getIdPerson()).getResultList();
+				.setParameter("person", idperson).getResultList();
 		List<GoalDto> listDto = GoalDelegate.mapFromGoalList(list);
 		LifeCoachDao.instance.closeConnections(em);
 		return listDto;
@@ -122,9 +123,9 @@ public class GoalBean {
 				goalv.setValue(String.valueOf(m.getValue()));
 				goalv.setExpectedValue(goaldto.getValue());
 				if (value <= expetedvalue) {
-					goalv.setValue("OK");
+					goalv.setResult("OK");
 				} else {
-					goalv.setValue("Fault");
+					goalv.setResult("Fault");
 				}
 				goalv.setData(m.getCreated());
 				list.add(goalv);
