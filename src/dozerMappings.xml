@@ -78,8 +78,8 @@
 			<b>start</b>
 		</field>
 		<field>
-			<a>idMeasureHistory</a>
-			<b>idMeasureHistory</b>
+			<a>idGoal</a>
+			<b>idGoal</b>
 		</field>
 		<field>
 			<a>person</a>
