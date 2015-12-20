@@ -130,7 +130,7 @@ public class GoalBean {
 				goalv.setData(m.getCreated());
 				list.add(goalv);
 			}
-			result.setGoal(goaldto);
+			result.setGoal(GoalDelegate.dtoToView(goaldto));
 			result.setGoalResultList(list);
 		}
 

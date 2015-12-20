@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import systemlogic.businesslogicservices.bean.GoalBean;
 import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
 import systemlogic.businesslogicservices.bean.PersonBean;
+import systemlogic.businesslogicservices.convert.GoalDelegate;
 import systemlogic.businesslogicservices.dto.GoalDto;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
@@ -52,7 +53,7 @@ public class GoalResource {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
 				GoalList gl  = new GoalList();
-				gl.setGoals(result);
+				gl.setGoals(GoalDelegate.dtoToView(result));
 				return Response.ok().entity(gl).build();
 			}
 		} catch (Exception e) {

@@ -6,8 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import systemlogic.businesslogicservices.dto.GoalDto;
-
 @XmlRootElement(name = "goalview")
 public class GoalResultViewList implements Serializable{
 	
@@ -18,7 +16,7 @@ public class GoalResultViewList implements Serializable{
 
 	private List<GoalResultView> goals;
 
-	private GoalDto goaltype;
+	private GoalView goaltype;
 	
 	@XmlElement(name = "goals")
 	public List<GoalResultView> getGoalResultList() {
@@ -30,11 +28,11 @@ public class GoalResultViewList implements Serializable{
 	}
 
 	@XmlElement(name = "goaltype")
-	public GoalDto getGoal() {
+	public GoalView getGoal() {
 		return goaltype;
 	}
 
-	public void setGoal(GoalDto goaltype) {
+	public void setGoal(GoalView goaltype) {
 		this.goaltype = goaltype;
 	}
 
