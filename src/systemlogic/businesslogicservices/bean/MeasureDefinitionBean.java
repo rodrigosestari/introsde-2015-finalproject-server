@@ -7,9 +7,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.entity.MeasureDefinition;
+import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
+import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 
 public class MeasureDefinitionBean {
 	// database operations
@@ -137,6 +139,16 @@ public class MeasureDefinitionBean {
 			}
 		}
 		return mtl;
+	}
+	
+	
+	public static MeasureDefinitionDto getDefinitionById(int id) {
+		MeasureDefinitionDto dto = null;
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		MeasureDefinition p = em.find(MeasureDefinition.class, id);
+		LifeCoachDao.instance.closeConnections(em);
+		dto = MeasureDefinitionDelegate.mapFromMeasure(p);
+		return dto;
 	}
 	
 
