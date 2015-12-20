@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.storageservices.LifeCoachDao;
@@ -12,6 +13,7 @@ import systemlogic.businesslogicservices.convert.MeasureHistoryDelegate;
 import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 import systemlogic.businesslogicservices.view.HealthProfileView;
 import systemlogic.businesslogicservices.view.MeasureHistoryView;
+import systemlogic.businesslogicservices.view.MeasureListHistoryView;
 
 public class MeasureHistoryBean {
 
@@ -183,7 +185,7 @@ public class MeasureHistoryBean {
 	 * @return object MeasureHistory inserted
 	 */
 	public static MeasureHistoryDto insertMeasure(MeasureHistoryDto m) {
-		MeasureHistory entity =  MeasureHistoryDelegate.mapToMeasure(m);
+		MeasureHistory entity = MeasureHistoryDelegate.mapToMeasure(m);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
@@ -195,7 +197,7 @@ public class MeasureHistoryBean {
 		}
 
 		LifeCoachDao.instance.closeConnections(em);
-        m = MeasureHistoryDelegate.mapFromMeasure(entity);
+		m = MeasureHistoryDelegate.mapFromMeasure(entity);
 		return m;
 
 	}
@@ -217,18 +219,84 @@ public class MeasureHistoryBean {
 		MeasureHistory ret = em.createNamedQuery("MeasureHistory.findPersonTypeID", MeasureHistory.class)
 				.setParameter("id", id).setParameter("md", md).setParameter("idhm", idmh).getSingleResult();
 		LifeCoachDao.instance.closeConnections(em);
-		MeasureHistoryView dto =MeasureHistoryDelegate.dtoToView(MeasureHistoryDelegate.mapFromMeasure(ret));
+		MeasureHistoryView dto = MeasureHistoryDelegate.dtoToView(MeasureHistoryDelegate.mapFromMeasure(ret));
 		return dto;
 
 	}
+
+	public static MeasureListHistoryView getSumPersonMeasureDay(int idPerson, int idMeasure, String dataDa,
+			String dataA) {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		MeasureListHistoryView result = null;
+		List<MeasureHistoryView> measure = null;
+
+		String sql = "select  sum(value), strftime('%Y-%m-%d', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
+				+ idMeasure + " and  idPerson = " + idPerson
+				+ " group by strftime('%d', datetime(created/1000, 'unixepoch'))   ";
+		Query query = em.createNativeQuery(sql);
+
+		List<Object[]> list = query.getResultList();
+		if (null != list) {
+			result =  new MeasureListHistoryView();
+			measure = new ArrayList<MeasureHistoryView>();
+			for (Object[] obj : list) {
+				try {
+					MeasureHistoryView mh = new MeasureHistoryView();
+					mh.setValue((double) obj[0]);
+					mh.setCreated((String) obj[1]);
+					measure.add(mh);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+			}
+			result.setMeasure(measure);
+		}
+		LifeCoachDao.instance.closeConnections(em);
+
+		return result;
+	}
 	
+	
+	public static MeasureListHistoryView getSumPersonMeasureMonth(int idPerson, int idMeasure, String dataDa,
+			String dataA) {
+		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		MeasureListHistoryView result = null;
+		List<MeasureHistoryView> measure = null;
+
+		String sql = "select  sum(value), strftime('%Y-%m-01', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
+				+ idMeasure + " and  idPerson = " + idPerson
+				+ " group by strftime('%Y-%m', datetime(created/1000, 'unixepoch'))   ";
+		Query query = em.createNativeQuery(sql);
+
+		List<Object[]> list = query.getResultList();
+		if (null != list) {
+			result =  new MeasureListHistoryView();
+			measure = new ArrayList<MeasureHistoryView>();
+			for (Object[] obj : list) {
+				try {
+					MeasureHistoryView mh = new MeasureHistoryView();
+					mh.setValue((double) obj[0]);
+					mh.setCreated((String) obj[1]);
+					measure.add(mh);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+			}
+			result.setMeasure(measure);
+		}
+		LifeCoachDao.instance.closeConnections(em);
+
+		return result;
+	}
+
 	/**
-	 * get a MeasureHistory and put into
-	 * a HealthProfile.
+	 * get a MeasureHistory and put into a HealthProfaile.
+	 * 
 	 * @param measure
-	 * List of MeasureHistory entity
-	 * @return
-	 * a HealthProfile structure
+	 *            List of MeasureHistory entity
+	 * @return a HealthProfile structure
 	 * 
 	 */
 	public static HealthProfileView getHealthProfileFromMeasure(MeasureHistory measure) {
@@ -236,8 +304,5 @@ public class MeasureHistoryBean {
 		m.add(measure);
 		return MeasureHistoryDelegate.getHealthProfileFromMeasureList(m);
 	}
-
-	
-
 
 }

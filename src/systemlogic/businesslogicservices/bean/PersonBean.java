@@ -268,6 +268,7 @@ public class PersonBean {
 			dataresult = sdf.format(data);
 		} catch (Exception e) {
 			e.printStackTrace();
+			dataresult = dateToString(new Date());
 		}
 		return dataresult;
 	}
