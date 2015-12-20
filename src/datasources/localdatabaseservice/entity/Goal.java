@@ -58,6 +58,9 @@ public class Goal  implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "idPerson", referencedColumnName = "idPerson")
 	private Person person;
+	
+	@Column(name = "signal")
+	private String signal;
 
 	public int getIdGoal() {
 		return idGoal;
@@ -115,10 +118,20 @@ public class Goal  implements Serializable{
 		this.person = person;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Goal [idMeasureHistory=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type
-				+ ", value=" + value + ", measureDefinition=" + measureDefinition + ", person=" + person + "]";
+		return "Goal [idGoal=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type + ", value=" + value
+				+ ", measureDefinition=" + measureDefinition + ", person=" + person + ", signal=" + signal + "]";
+	}
+
+	public String getSignal() {
+		return signal;
+	}
+
+	public void setSignal(String signal) {
+		this.signal = signal;
 	}
 
 	@Override

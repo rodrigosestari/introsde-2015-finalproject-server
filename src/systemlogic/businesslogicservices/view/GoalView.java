@@ -12,7 +12,7 @@ import systemlogic.businesslogicservices.dto.PersonDto;
 
 @XmlRootElement(name = "goal")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "idGoal", "start", "end","type","value","measureDefinition","person"})
+@XmlType(propOrder = { "idGoal", "start", "end","type","signal","value","measureDefinition","person"})
 public class GoalView implements Serializable {
 
 	/**
@@ -33,6 +33,8 @@ public class GoalView implements Serializable {
 	private MeasureDefinitionDto measureDefinition;
 
 	private PersonDto person;
+	
+	private String signal;
 
 	public int getIdGoal() {
 		return idGoal;
@@ -90,11 +92,20 @@ public class GoalView implements Serializable {
 		this.person = person;
 	}
 
+	public String getSignal() {
+		return signal;
+	}
+
+	public void setSignal(String signal) {
+		this.signal = signal;
+	}
+
 	@Override
 	public String toString() {
 		return "GoalView [idGoal=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type + ", value="
-				+ value + ", measureDefinition=" + measureDefinition + ", person=" + person + "]";
+				+ value + ", measureDefinition=" + measureDefinition + ", person=" + person + ", signal=" + signal
+				+ "]";
 	}
-	
+
 	
 }

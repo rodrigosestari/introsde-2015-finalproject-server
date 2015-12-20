@@ -28,6 +28,8 @@ public class GoalDto implements  Serializable {
 	private MeasureDefinitionDto measureDefinition;
 
 	private PersonDto person;
+	
+	private String signal;
 
 	public int getIdGoal() {
 		return idGoal;
@@ -85,12 +87,21 @@ public class GoalDto implements  Serializable {
 		this.person = person;
 	}
 
-	@Override
-	public String toString() {
-		return "GoalDto [idMeasureHistory=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type
-				+ ", value=" + value + ", measureDefinition=" + measureDefinition + ", person=" + person + "]";
+	public String getSignal() {
+		return signal;
 	}
 
+	public void setSignal(String signal) {
+		this.signal = signal;
+	}
+
+	@Override
+	public String toString() {
+		return "GoalDto [idGoal=" + idGoal + ", start=" + start + ", end=" + end + ", type=" + type + ", value=" + value
+				+ ", measureDefinition=" + measureDefinition + ", person=" + person + ", signal=" + signal + "]";
+	}
+
+	
 	
 	
 }

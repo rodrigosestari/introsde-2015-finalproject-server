@@ -49,6 +49,7 @@ public class GoalDelegate {
 		result.setStart(PersonBean.dateToString(dto.getStart()));
 		result.setType(dto.getType().toString());
 		result.setValue(dto.getValue());
+		result.setSignal(dto.getSignal());
 		return result;
 	}
 

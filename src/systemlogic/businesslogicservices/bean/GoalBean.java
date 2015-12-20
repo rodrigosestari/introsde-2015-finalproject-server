@@ -24,6 +24,10 @@ public class GoalBean {
 		DAILY, MONTHLY
 	}
 
+	public enum TypeSignall {
+		LESS, EQUAL, GRATER, LESS_EQUAL, GRATER_EQUAL
+	}
+
 	public static GoalDto insertGoal(GoalDto p) {
 		Goal goal = GoalDelegate.mapToGoal(p);
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
@@ -62,7 +66,7 @@ public class GoalBean {
 		Goal p = em.find(Goal.class, id);
 		LifeCoachDao.instance.closeConnections(em);
 		GoalDto dto = GoalDelegate.mapFromGoal(p);
-		return  dto;
+		return dto;
 	}
 
 	public boolean createGoal(PersonDto person, MeasureDefinitionDto measure, TypeGoal type, Float value,
@@ -83,8 +87,8 @@ public class GoalBean {
 
 	public static List<GoalDto> personGoals(int idperson) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-		List<Goal> list = em.createNamedQuery("Goal.findbyPerson", Goal.class)
-				.setParameter("person", idperson).getResultList();
+		List<Goal> list = em.createNamedQuery("Goal.findbyPerson", Goal.class).setParameter("person", idperson)
+				.getResultList();
 		List<GoalDto> listDto = GoalDelegate.mapFromGoalList(list);
 		LifeCoachDao.instance.closeConnections(em);
 		return listDto;
@@ -122,10 +126,55 @@ public class GoalBean {
 				Double expetedvalue = Double.parseDouble(goaldto.getValue());
 				goalv.setValue(String.valueOf(m.getValue()));
 				goalv.setExpectedValue(goaldto.getValue());
-				if (value <= expetedvalue) {
-					goalv.setResult("OK");
-				} else {
+
+				switch (goaldto.getSignal().toUpperCase()) {
+				case "LESS":
+					if (value < expetedvalue) {
+						goalv.setResult("OK");
+					} else {
+						goalv.setResult("Fault");
+					}
+
+					break;
+
+				case "EQUAL":
+					if (value == expetedvalue) {
+						goalv.setResult("OK");
+					} else {
+						goalv.setResult("Fault");
+					}
+
+					break;
+
+				case "GRATER":
+					if (value > expetedvalue) {
+						goalv.setResult("OK");
+					} else {
+						goalv.setResult("Fault");
+					}
+
+					break;
+
+				case "LESS_EQUAL":
+					if (value <= expetedvalue) {
+						goalv.setResult("OK");
+					} else {
+						goalv.setResult("Fault");
+					}
+
+					break;
+
+				case "GRATER_EQUAL":
+					if (value >= expetedvalue) {
+						goalv.setResult("OK");
+					} else {
+						goalv.setResult("Fault");
+					}
+					break;
+
+				default:
 					goalv.setResult("Fault");
+					break;
 				}
 				goalv.setData(m.getCreated());
 				list.add(goalv);
@@ -137,7 +186,7 @@ public class GoalBean {
 		return result;
 	}
 
-	public  static GoalResultViewList analiseGoal(int idGoal) {
+	public static GoalResultViewList analiseGoal(int idGoal) {
 		GoalDto goaldto = getGoal(idGoal);
 		return analiseGoal(goaldto);
 	}

@@ -23,6 +23,7 @@ public class GoalResultView  implements Serializable {
 	private String data;
 
 
+
 	public String getExpectedValue() {
 		return expectedValue;
 	}
@@ -47,11 +48,12 @@ public class GoalResultView  implements Serializable {
 	public void setData(String data) {
 		this.data = data;
 	}
+
 	@Override
 	public String toString() {
-		return "GoalResultView [ expectedValue=" + expectedValue + ", value=" + value
-				+ ", result=" + result + ", data=" + data + "]";
+		return "GoalResultView [expectedValue=" + expectedValue + ", value=" + value + ", result=" + result + ", data="
+				+ data +  "]";
 	}
-
+	
 	
 }

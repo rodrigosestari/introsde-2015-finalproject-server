@@ -69,7 +69,7 @@
 		<class-a>systemlogic.businesslogicservices.dto.GoalDto</class-a>
 		<class-b>datasources.localdatabaseservice.entity.Goal</class-b>
 
-		<field>
+		<field><a>signal</a><b>signal</b></field><field>
 			<a>end</a>
 			<b>end</b>
 		</field>

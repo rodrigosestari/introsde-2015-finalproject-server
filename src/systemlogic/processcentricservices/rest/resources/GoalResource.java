@@ -26,6 +26,7 @@ import systemlogic.businesslogicservices.dto.GoalDto;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
 import systemlogic.businesslogicservices.dto.PersonDto;
 import systemlogic.businesslogicservices.view.GoalList;
+import systemlogic.businesslogicservices.view.GoalView;
 
 @Stateless
 @LocalBean
@@ -66,22 +67,29 @@ public class GoalResource {
 	@Path("{personId}/{measureId}")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response createGoal(@PathParam("personId") int id, @PathParam("measureId") int idmeasure, GoalDto mb)
+	public Response createGoal(@PathParam("personId") int id, @PathParam("measureId") int idmeasure, GoalView mb)
 			throws IOException {
+		GoalDto dto= null;
 		PersonDto person = PersonBean.getPersonById(id);
 		MeasureDefinitionDto defintion = MeasureDefinitionBean.getDefinitionById(idmeasure);
 		if ((person != null) && (defintion != null)) {
-			mb.setPerson(person);
-			mb.setMeasureDefinition(defintion);
-			mb = GoalBean.insertGoal(mb);
+		    dto=  new GoalDto();
+			dto.setPerson(person);
+			dto.setMeasureDefinition(defintion);
+			dto.setEnd(PersonBean.stringToDate(mb.getEnd()));
+			dto.setStart(PersonBean.stringToDate(mb.getStart()));
+			dto.setSignal(mb.getSignal());
+			dto.setType(mb.getType());
+			dto.setValue(mb.getValue());
+			dto = GoalBean.insertGoal(dto);
 		}
 
 		try {
 
-			if (null == mb) {
+			if (null == dto) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
-				return Response.ok().entity(mb).build();
+				return Response.ok().entity(GoalDelegate.dtoToView(dto)).build();
 			}
 		} catch (Exception e) {
 			return Response.serverError().build();
