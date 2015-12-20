@@ -1,5 +1,7 @@
 package systemlogic.businesslogicservices.view;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -8,9 +10,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "goalresult")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {  "expectedValue", "value", "result", "data" })
-public class GoalResultView {
+public class GoalResultView  implements Serializable {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 123405573322382387L;
 	private String expectedValue;
 	private String value;
 	private String result;
