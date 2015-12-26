@@ -64,7 +64,7 @@ public class GoalResource {
 	}
 
 	@POST
-	@Path("{personId}/{measureId}")
+	@Path("{personId}/{measure}")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response createGoal(@PathParam("personId") int id, @PathParam("measure") String measure, GoalView mb)
