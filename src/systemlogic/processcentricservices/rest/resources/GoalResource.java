@@ -67,11 +67,11 @@ public class GoalResource {
 	@Path("{personId}/{measureId}")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response createGoal(@PathParam("personId") int id, @PathParam("measureId") int idmeasure, GoalView mb)
+	public Response createGoal(@PathParam("personId") int id, @PathParam("measure") String measure, GoalView mb)
 			throws IOException {
 		GoalDto dto= null;
 		PersonDto person = PersonBean.getPersonById(id);
-		MeasureDefinitionDto defintion = MeasureDefinitionBean.getDefinitionById(idmeasure);
+		MeasureDefinitionDto defintion = MeasureDefinitionBean.getMeasureDefinitionByName(measure);
 		if ((person != null) && (defintion != null)) {
 		    dto=  new GoalDto();
 			dto.setPerson(person);
