@@ -7,11 +7,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import datasources.localdatabaseservice.entity.MeasureDefinition;
-import datasources.localdatabaseservice.entity.MeasureHistory;
 import datasources.storageservices.LifeCoachDao;
 import systemlogic.businesslogicservices.convert.MeasureDefinitionDelegate;
 import systemlogic.businesslogicservices.dto.MeasureDefinitionDto;
-import systemlogic.businesslogicservices.dto.MeasureHistoryDto;
 
 public class MeasureDefinitionBean {
 	// database operations

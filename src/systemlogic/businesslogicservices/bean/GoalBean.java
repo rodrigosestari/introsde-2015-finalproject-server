@@ -25,7 +25,8 @@ public class GoalBean {
 	}
 
 	public enum TypeSignall {
-		LESS, EQUAL, GRATER, LESS_EQUAL, GRATER_EQUAL
+		LESS, EQUAL, GRATER, LESS_EQUAL, GRATER_EQUAL,
+		LESS_SUM, EQUAL_SUM, GRATER_SUM, LESS_EQUAL_SUM, GRATER_EQUAL_SUM
 	}
 
 	public static GoalDto insertGoal(GoalDto p) {
@@ -107,14 +108,15 @@ public class GoalBean {
 		GoalResultViewList result = null;
 		List<GoalResultView> list = null;
 		MeasureListHistoryView measure = null;
+		String param = goaldto.getSignal().substring( goaldto.getSignal().length()-3,  goaldto.getSignal().length());
 		if (goaldto.getType().equalsIgnoreCase(TypeGoal.DAILY.toString())) {
 			measure = MeasureHistoryBean.getSumPersonMeasureDay(goaldto.getPerson().getIdPerson(),
 					goaldto.getMeasureDefinition().getIdMeasureDef(), goaldto.getStart().toString(),
-					goaldto.getEnd().toString());
+					goaldto.getEnd().toString(),param.equals("SUM"));
 		} else {
 			measure = MeasureHistoryBean.getSumPersonMeasureMonth(goaldto.getPerson().getIdPerson(),
 					goaldto.getMeasureDefinition().getIdMeasureDef(), goaldto.getStart().toString(),
-					goaldto.getEnd().toString());
+					goaldto.getEnd().toString(),param.equals("SUM"));
 		}
 
 		if (null != measure) {
@@ -129,6 +131,7 @@ public class GoalBean {
 
 				switch (goaldto.getSignal().toUpperCase()) {
 				case "LESS":
+				case "LESS_SUM":
 					if (value < expetedvalue) {
 						goalv.setResult("OK");
 					} else {
@@ -138,6 +141,7 @@ public class GoalBean {
 					break;
 
 				case "EQUAL":
+				case "EQUAL_SUM":
 					if (value == expetedvalue) {
 						goalv.setResult("OK");
 					} else {
@@ -147,6 +151,7 @@ public class GoalBean {
 					break;
 
 				case "GRATER":
+				case "GRATER_SUM":
 					if (value > expetedvalue) {
 						goalv.setResult("OK");
 					} else {
@@ -156,6 +161,7 @@ public class GoalBean {
 					break;
 
 				case "LESS_EQUAL":
+				case "LESS_EQUAL_SUM":
 					if (value <= expetedvalue) {
 						goalv.setResult("OK");
 					} else {
@@ -165,6 +171,7 @@ public class GoalBean {
 					break;
 
 				case "GRATER_EQUAL":
+				case "GRATER_EQUAL_SUM":
 					if (value >= expetedvalue) {
 						goalv.setResult("OK");
 					} else {

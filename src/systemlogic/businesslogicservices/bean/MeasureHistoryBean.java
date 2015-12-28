@@ -225,12 +225,16 @@ public class MeasureHistoryBean {
 	}
 
 	public static MeasureListHistoryView getSumPersonMeasureDay(int idPerson, int idMeasure, String dataDa,
-			String dataA) {
+			String dataA, boolean sum) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		MeasureListHistoryView result = null;
 		List<MeasureHistoryView> measure = null;
 
-		String sql = "select  sum(value), strftime('%Y-%m-%d', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
+		String param ="max";
+		if (sum)
+			param ="sum";
+		
+		String sql = "select  "+param+"(value), strftime('%Y-%m-%d', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
 				+ idMeasure + " and  idPerson = " + idPerson
 				+ " group by strftime('%d', datetime(created/1000, 'unixepoch'))   ";
 		Query query = em.createNativeQuery(sql);
@@ -259,12 +263,16 @@ public class MeasureHistoryBean {
 	
 	
 	public static MeasureListHistoryView getSumPersonMeasureMonth(int idPerson, int idMeasure, String dataDa,
-			String dataA) {
+			String dataA, boolean sum) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		MeasureListHistoryView result = null;
 		List<MeasureHistoryView> measure = null;
 
-		String sql = "select  sum(value), strftime('%Y-%m-01', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
+		String param ="max";
+		if (sum)
+			param ="sum";
+		
+		String sql = "select  "+param+"(value), strftime('%Y-%m-01', datetime(created/1000, 'unixepoch')) from MeasureHistory  where idMeasureDef = "
 				+ idMeasure + " and  idPerson = " + idPerson
 				+ " group by strftime('%Y-%m', datetime(created/1000, 'unixepoch'))   ";
 		Query query = em.createNativeQuery(sql);
