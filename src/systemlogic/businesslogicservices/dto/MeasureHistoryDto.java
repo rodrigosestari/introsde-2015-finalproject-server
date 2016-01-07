@@ -19,6 +19,17 @@ public class MeasureHistoryDto implements Serializable {
 	private MeasureDefinitionDto measureDefinition;
 
 	private PersonDto person;
+	
+	private String idext = null;
+	
+	
+	public String getIdext() {
+		return idext;
+	}
+
+	public void setIdext(String idext) {
+		this.idext = idext;
+	}
 
 	public int getIdMeasureHistory() {
 		return idMeasureHistory;

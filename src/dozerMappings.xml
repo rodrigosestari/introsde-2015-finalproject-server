@@ -40,6 +40,11 @@
 			<a>created</a>
 			<b>created</b>
 		</field>
+
+		<field>
+			<a>idext</a>
+			<b>idext</b>
+		</field>
 		<field>
 			<a>idMeasureHistory</a>
 			<b>idMeasureHistory</b>
@@ -69,7 +74,11 @@
 		<class-a>systemlogic.businesslogicservices.dto.GoalDto</class-a>
 		<class-b>datasources.localdatabaseservice.entity.Goal</class-b>
 
-		<field><a>signal</a><b>signal</b></field><field>
+		<field>
+			<a>signal</a>
+			<b>signal</b>
+		</field>
+		<field>
 			<a>end</a>
 			<b>end</b>
 		</field>

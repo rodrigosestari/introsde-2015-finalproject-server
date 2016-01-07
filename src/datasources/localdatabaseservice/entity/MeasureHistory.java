@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 		@NamedQuery(name = "MeasureHistory.findOldMeasurePerson", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id GROUP BY h.measureDefinition, h.person ORDER BY h.idMeasureHistory DESC"),
 		@NamedQuery(name = "MeasureHistory.findPersonTypeID", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id and h.measureDefinition.measureName = :md and h.idMeasureHistory = :idhm"),
 		@NamedQuery(name = "MeasureHistory.findPersonDefinition", query = "SELECT h FROM MeasureHistory h WHERE h.person.idPerson = :id and h.measureDefinition.measureName = :md") ,
+		@NamedQuery(name = "MeasureHistory.deleteImport", query = "DELETE FROM MeasureHistory WHERE idext is not null AND person.idPerson = :id") 
 		})
 @XmlRootElement
 public class MeasureHistory implements Serializable {
@@ -58,6 +59,18 @@ public class MeasureHistory implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "idPerson", referencedColumnName = "idPerson")
 	private Person person;
+
+	@Column(name = "id_ext", nullable=true)
+	private String idext = null;
+	
+	
+	public String getIdext() {
+		return idext;
+	}
+
+	public void setIdext(String idext) {
+		this.idext = idext;
+	}
 
 	public int getIdMeasureHistory() {
 		return idMeasureHistory;
