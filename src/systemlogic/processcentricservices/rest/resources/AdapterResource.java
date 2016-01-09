@@ -36,7 +36,7 @@ public class AdapterResource {
 	Request request;
 
 	@POST
-	@Path("{personId}/{measureType}")
+	@Path("{personId}")
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response newMeasureImport(@PathParam("personId") int id, MeasureListHistoryImportView mb)
@@ -64,6 +64,7 @@ public class AdapterResource {
 					dto.setIdext(v.getId_ext());
 					dto.setMeasureDefinition(m);
 					dto.setPerson(p);
+					dto.setCreated(PersonBean.stringToDate(v.getCreated()));
 					dto.setValue(String.valueOf(v.getValue()));
 
 					MeasureHistoryBean.insertMeasure(dto);

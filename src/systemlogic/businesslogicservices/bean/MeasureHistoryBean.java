@@ -226,9 +226,17 @@ public class MeasureHistoryBean {
 	
 	public static boolean deleteImport(int id) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
-
-		return 1 == em.createNamedQuery("MeasureHistory.deleteImport", MeasureHistory.class).setParameter("id", id).executeUpdate();
-	
+		EntityTransaction tx = em.getTransaction();
+		int cc = -1;
+		tx.begin();
+		try {
+			cc =em.createNamedQuery("MeasureHistory.deleteImport", MeasureHistory.class).setParameter("id", id).executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		}
+		
+		return 1 == cc;
 	}
 
 	public static MeasureListHistoryView getSumPersonMeasureDay(int idPerson, int idMeasure, String dataDa,

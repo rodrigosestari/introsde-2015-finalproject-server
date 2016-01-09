@@ -113,13 +113,18 @@ public class MeasureDefinitionBean {
 	 */
 	static public MeasureDefinitionDto getMeasureDefinitionByName(String name) {
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
+		MeasureDefinitionDto dto = null;
+		try {
+			MeasureDefinition me = em.createNamedQuery("MeasureDefinition.findbyName", MeasureDefinition.class)
+					.setParameter("name", name).getSingleResult();
 
-		MeasureDefinition me = em.createNamedQuery("MeasureDefinition.findbyName", MeasureDefinition.class)
-				.setParameter("name", name).getSingleResult();
-
-		LifeCoachDao.instance.closeConnections(em);
-		MeasureDefinitionDto dto = MeasureDefinitionDelegate.mapFromMeasure(me);
-		return dto;
+			LifeCoachDao.instance.closeConnections(em);
+			dto = MeasureDefinitionDelegate.mapFromMeasure(me);
+	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+				return dto;
 	}
 
 	/**
