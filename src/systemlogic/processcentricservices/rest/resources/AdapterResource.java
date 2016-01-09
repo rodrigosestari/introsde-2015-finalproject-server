@@ -26,7 +26,7 @@ import systemlogic.businesslogicservices.view.MeasureListHistoryImportView;
 
 @Stateless
 @LocalBean
-@Path("/adpater")
+@Path("/adapter")
 public class AdapterResource {
 	// Allows to insert contextual objects into the class,
 	// e.g. ServletContext, Request, Response, UriInfo
