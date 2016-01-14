@@ -7,7 +7,7 @@ Final Project
 **Description:**
 
 In this assignment is implemented a server calling this server. 
-The server was deployed on Heroku **httpl://rodrigo-sestari-final-rest.herokuapp.com/finalprojectrest**.
+The server was deployed on Heroku **http://rodrigo-sestari-final-rest.herokuapp.com/finalprojectrest**.
 Instead the client was implemented to call Heroku server. 
 
 This project contains a database management system with internal database MySQL and a Rest WebService.
@@ -20,6 +20,68 @@ This project contains a database management system with internal database MySQL 
 
 
 * **Request #1:** GET /person should list all the people (see above Person model to know what data to return here) in your database (wrapped under the root element "people")
+''
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<people>
+    <person>
+        <idPerson>1</idPerson>
+        <firstname>Sonia</firstname>
+        <lastname>Broz</lastname>
+        <healthProfile>
+            <measureType>
+                <measure>weight</measure>
+                <value>32.0</value>
+            </measureType>
+            <measureType>
+                <measure>heigth</measure>
+                <value>37.8</value>
+            </measureType>
+            <measureType>
+                <measure>heart</measure>
+                <value>74.0</value>
+            </measureType>
+        </healthProfile>
+    </person>
+    <person>
+        <idPerson>2</idPerson>
+        <firstname>Maicon</firstname>
+        <lastname>Antonio</lastname>
+        <healthProfile>
+            <measureType>
+                <measure>heigth</measure>
+                <value>102.0</value>
+            </measureType>
+            <measureType>
+                <measure>weight</measure>
+                <value>66.9</value>
+            </measureType>
+            <measureType>
+                <measure>heart</measure>
+                <value>78.9</value>
+            </measureType>
+        </healthProfile>
+    </person>
+    <person>
+        <idPerson>3</idPerson>
+        <firstname>Anna</firstname>
+        <lastname>Caprese</lastname>
+        <healthProfile>
+            <measureType>
+                <measure>weight</measure>
+                <value>78.9</value>
+            </measureType>
+            <measureType>
+                <measure>heigth</measure>
+                <value>129.8</value>
+            </measureType>
+            <measureType>
+                <measure>heart</measure>
+                <value>71.3</value>
+            </measureType>
+        </healthProfile>
+    </person>
+</people>
+''
 * **Request #2:** GET /person/{id} should give all the personal information plus current measures of person identified by {id} (e.g., current measures means current health profile)
 * **Request #3**: PUT /person/{id} should update the personal information of the person identified by {id} (e.g., only the person's information, not the measures of the health profile)
 * **Request #4:** POST /person should create a new person and return the newly created person with its assigned id (if a health profile is included, create also those measurements for the new person).
