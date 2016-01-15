@@ -13,7 +13,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
@@ -76,9 +75,7 @@ public class AdapterResource {
 				return Response.noContent().build();
 			}
 
-			  UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-			  builder.path("");
-		      return Response.created(builder.build()).build();
+		      return Response.ok().build();
 
 		} catch (Exception e) {
 			return Response.serverError().build();
