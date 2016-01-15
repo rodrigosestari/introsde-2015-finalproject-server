@@ -72,7 +72,7 @@ public class GoalResource {
 		GoalDto dto= null;
 		PersonDto person = PersonBean.getPersonById(id);
 		MeasureDefinitionDto defintion = MeasureDefinitionBean.getMeasureDefinitionByName(measure.toLowerCase());
-		if (null != defintion){
+		if (null == defintion){
 			defintion = new MeasureDefinitionDto();
 			defintion.setMeasureName(measure.toLowerCase());
 			MeasureDefinitionBean.insertMeasureDefinition(defintion);
