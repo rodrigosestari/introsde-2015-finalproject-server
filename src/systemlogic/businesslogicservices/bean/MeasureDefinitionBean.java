@@ -43,6 +43,7 @@ public class MeasureDefinitionBean {
 	 */
 	public static MeasureDefinitionDto insertMeasureDefinition(MeasureDefinitionDto p) {
 		MeasureDefinition md  = MeasureDefinitionDelegate.mapToMeasure(p);
+		md.setMeasureName(md.getMeasureName().toLowerCase());
 		EntityManager em = LifeCoachDao.instance.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
