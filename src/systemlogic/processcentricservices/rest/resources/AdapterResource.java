@@ -77,6 +77,7 @@ public class AdapterResource {
 			}
 
 			  UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+			  builder.path("");
 		      return Response.created(builder.build()).build();
 
 		} catch (Exception e) {
