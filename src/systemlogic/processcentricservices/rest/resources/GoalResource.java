@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import systemlogic.businesslogicservices.bean.GoalBean;
@@ -94,7 +95,9 @@ public class GoalResource {
 			if (null == dto) {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			} else {
-				return Response.ok().entity(GoalDelegate.dtoToView(dto)).build();
+				  UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+				  builder.path(Integer.toString(dto.getIdGoal()));
+			      return Response.created(builder.build()).build();
 			}
 		} catch (Exception e) {
 			return Response.serverError().build();

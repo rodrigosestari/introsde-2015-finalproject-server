@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import systemlogic.businesslogicservices.bean.MeasureDefinitionBean;
@@ -67,7 +68,7 @@ public class AdapterResource {
 					dto.setCreated(PersonBean.stringToDate(v.getCreated()));
 					dto.setValue(String.valueOf(v.getValue()));
 
-					MeasureHistoryBean.insertMeasure(dto);
+					dto =MeasureHistoryBean.insertMeasure(dto);
 
 				}
 
@@ -75,7 +76,8 @@ public class AdapterResource {
 				return Response.noContent().build();
 			}
 
-			return Response.ok().build();
+			  UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+		      return Response.created(builder.build()).build();
 
 		} catch (Exception e) {
 			return Response.serverError().build();
