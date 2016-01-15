@@ -52,7 +52,7 @@ public class AdapterResource {
 
 				for (MeasureHistoryImportView v : mb.getMeasure()) {
 
-					MeasureDefinitionDto m = MeasureDefinitionBean.getMeasureDefinitionByName(v.getMeasureType());
+					MeasureDefinitionDto m = MeasureDefinitionBean.getMeasureDefinitionByName(v.getMeasureType().toLowerCase());
 					if (null == m) {
 						// if measure dont found, come created it
 						m = new MeasureDefinitionDto();

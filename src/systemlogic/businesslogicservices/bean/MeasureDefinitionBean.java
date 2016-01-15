@@ -117,7 +117,7 @@ public class MeasureDefinitionBean {
 		MeasureDefinitionDto dto = null;
 		try {
 			MeasureDefinition me = em.createNamedQuery("MeasureDefinition.findbyName", MeasureDefinition.class)
-					.setParameter("name", name).getSingleResult();
+					.setParameter("name", name.toLowerCase()).getSingleResult();
 
 			LifeCoachDao.instance.closeConnections(em);
 			dto = MeasureDefinitionDelegate.mapFromMeasure(me);
